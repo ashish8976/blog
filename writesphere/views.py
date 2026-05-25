@@ -161,6 +161,7 @@ def category(request):
 def dashboard(request):
     return render (request, 'dashboard.html')
 
+
 def create_post(request):
     if request.method == "POST":
         Post.objects.create(
