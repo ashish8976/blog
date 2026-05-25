@@ -1,0 +1,133 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard — WriteSphere</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="{% url 'index' %}" class="logo">Write<span>Sphere</span></a>
+    <ul class="nav-links">
+      <li><a href="{% url 'index' %}">Home</a></li>
+      <li><a href="{% url 'explore' %}">Explore</a></li>
+      <li><a href="{% url 'dashboard'%}" class="active">Dashboard</a></li>
+    </ul>
+    
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+  
+</nav>
+
+<div class="dash-layout">
+  <!-- SIDEBAR -->
+  <aside class="dash-sidebar">
+    <p class="dash-section-label">Main</p>
+    <a href="{% url 'dashboard'%}" class="dash-nav-link active"><span class="nav-icon">📊</span>Dashboard</a>
+    <a href="{% url 'create_post' %}" class="dash-nav-link"><span class="nav-icon">✍️</span>New Post</a>
+    <a href="{% url 'author_story'%}" class="dash-nav-link"><span class="nav-icon">📄</span>My Stories</a>
+    <a href="#" class="dash-nav-link"><span class="nav-icon">📝</span>Drafts</a>
+
+    <p class="dash-section-label">Insights</p>
+    <a href="#" class="dash-nav-link"><span class="nav-icon">📈</span>Analytics</a>
+    <a href="#" class="dash-nav-link"><span class="nav-icon">♥</span>Likes</a>
+    <a href="#" class="dash-nav-link"><span class="nav-icon">💬</span>Comments</a>
+
+    <p class="dash-section-label">Account</p>
+    <a href="{% url 'profile' %}" class="dash-nav-link">
+      <span class="nav-icon">👤</span>Profile</a>
+    <a href="#" class="dash-nav-link"><span class="nav-icon">⚙️</span>Settings</a>
+    <a href="{% url 'logout' %}" class="dash-nav-link"><span class="nav-icon">→</span>Sign Out</a>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="dash-main">
+    <div class="dash-header">
+      <div>
+        <p style="font-size:.85rem;color:var(--ink-muted)">Good morning ✦</p>
+        <h2>Welcome back, <em>{{user.fname}} {{user.lname}}</em></h2>
+      </div>
+      <a href="{% url 'create_post' %}" class="btn btn-primary">+ Write New Post</a>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="stat-cards">
+      <div class="stat-card">
+        <span class="sc-icon">📄</span>
+        <span class="sc-num"></span>
+        <div class="sc-label" >Total Stories</div>
+       
+      </div>
+      <div class="stat-card">
+        <span class="sc-icon">♥</span>
+        <span class="sc-num"></span>
+        <div class="sc-label">Total Likes</div>
+      </div>
+      <div class="stat-card">
+        <span class="sc-icon">👥</span>
+        <span class="sc-num"></span>
+        <div class="sc-label">Followers</div>
+        
+      </div>
+    </div>
+
+    <!-- POSTS TABLE -->
+    <div class="posts-table">
+      <div class="table-top">
+        <h3>Your Stories</h3>
+        <a href="{% url 'create_post' %}" class="btn btn-ghost btn-sm">New Post →</a>
+      </div>
+      <div class="table-row table-head">
+        <div>Title</div>
+        <div>Category</div>
+        <div>Published</div>
+        <div>Status</div>
+        <div>Actions</div>
+      </div>
+      <div class="table-row">
+        <div class="table-title"><a href="blog-detail.html" style="color:inherit">Building the Next Generation of Human-Computer Interfaces</a></div>
+        <div><span class="tag cat-tech">Technology</span></div>
+        <div class="table-muted">Mar 3, 2026</div>
+        <div><span class="badge badge-published">Published</span></div>
+        <div class="tbl-actions"><button class="tbl-btn" onclick="location.href='{% url 'create_post' %}'">Edit</button><button class="tbl-btn del">Delete</button></div>
+      </div>
+      <div class="table-row">
+        <div class="table-title"><a href="blog-detail.html" style="color:inherit">The Quiet Revolution in Typography That Nobody's Talking About</a></div>
+        <div><span class="tag cat-design">Design</span></div>
+        <div class="table-muted">Feb 18, 2026</div>
+        <div><span class="badge badge-published">Published</span></div>
+        <div class="tbl-actions"><button class="tbl-btn" onclick="location.href='{% url 'create_post' %}'">Edit</button><button class="tbl-btn del">Delete</button></div>
+      </div>
+      <div class="table-row">
+        <div class="table-title"><a href="blog-detail.html" style="color:inherit">Open Source Is Eating the World — And That's a Good Thing</a></div>
+        <div><span class="tag cat-tech">Technology</span></div>
+        <div class="table-muted">Feb 5, 2026</div>
+        <div><span class="badge badge-published">Published</span></div>
+        <div class="tbl-actions"><button class="tbl-btn" onclick="location.href='{% url 'create_post' %}'">Edit</button><button class="tbl-btn del">Delete</button></div>
+      </div>
+      <div class="table-row">
+        <div class="table-title" style="color:var(--ink-muted)">The Problem With Productivity Culture [DRAFT]</div>
+        <div><span class="tag">Philosophy</span></div>
+        <div class="table-muted">—</div>
+        <div><span class="badge badge-draft">Draft</span></div>
+        <div class="tbl-actions"><button class="tbl-btn" onclick="location.href='{% url 'create_post' %}'">Edit</button><button class="tbl-btn del">Delete</button></div>
+      </div>
+      <div class="table-row">
+        <div class="table-title"><a href="blog-detail.html" style="color:inherit">Slow Thinking in a Fast World: The Case for Deliberation</a></div>
+        <div><span class="tag">Philosophy</span></div>
+        <div class="table-muted">Jan 22, 2026</div>
+        <div><span class="badge badge-published">Published</span></div>
+        <div class="tbl-actions"><button class="tbl-btn" onclick="location.href='{% url 'create_post' %}'">Edit</button><button class="tbl-btn del">Delete</button></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

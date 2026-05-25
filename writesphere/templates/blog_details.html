@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="blog-hero">
+  <div class="blog-hero-inner">
+    <div class="breadcrumb">
+      <a href="{% url 'index'%}">Home</a> 
+      <a href="{% url 'explore'%}">Explore</a> 
+      <span>Technology</span>
+    </div>
+    <span class="blog-hero-cat">Technology</span>
+    <h1 class="blog-hero-title">Building the Next Generation of Human-Computer Interfaces</h1>
+    <div class="blog-meta-bar">
+      <div class="blog-author-info">
+        <div class="avatar-placeholder avatar-md" style="background:linear-gradient(135deg,#f093fb,#f5576c)">A</div>
+        <div>
+          <h5>Arjun Mehta</h5>
+          <p>March 3, 2026 · 8 min read</p>
+        </div>
+      </div>
+      <div class="blog-meta-right">
+        <span class="meta-stat">♥ <span id="likeCount">3,214</span></span>
+        <span class="meta-stat">💬 148</span>
+        <span class="meta-stat">👁 12.4k</span>
+        <button class="follow-sm btn btn-outline btn-sm" onclick="this.textContent=this.textContent==='Follow'?'Following':'Follow'">Follow</button>
+      </div>
+    </div>
+  </div>
+  <img class="blog-cover-img" src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&q=80" alt="Cover">
+</div>
+
+<div class="blog-layout">
+  <article class="blog-article">
+    <div class="prose">
+      <p>We are standing at the edge of a profound shift in how humans relate to machines. For decades, the primary interface between mind and computer has remained stubbornly unchanged: keyboard, mouse, screen. But the next decade promises something far more radical — interfaces that respond to thought, that anticipate need, that blur the boundary between tool and self.</p>
+
+      <h2>The History of Human-Computer Interaction</h2>
+      <p>When Douglas Engelbart first demonstrated the mouse in 1968, it was a revelation. Suddenly, computing wasn't just for specialists who could speak the language of punch cards and terminal commands. The mouse democratized access. It brought the machine closer to the human.</p>
+      <p>The touchscreen did it again. When Steve Jobs unveiled the iPhone in 2007, the intervening layer of the mouse was removed entirely. You touched the thing itself, or so it felt. The illusion of directness was powerful.</p>
+
+      <blockquote>"The most profound technologies are those that disappear. They weave themselves into the fabric of everyday life until they are indistinguishable from it." — Mark Weiser</blockquote>
+
+      <h2>Neural Interfaces: What We Know</h2>
+      <p>Neural interface technology works by detecting electrical signals produced by neurons in the brain. These signals can be captured non-invasively through EEG headsets, or invasively through surgically implanted electrodes.</p>
+      <p>The current state of the technology is still limited. Reading complex, high-resolution signals from the brain remains technically challenging. But algorithms are only now becoming powerful enough to be genuinely useful.</p>
+
+      <h3>What's Actually Possible Today</h3>
+      <p>Already, BCIs are being used clinically to help paralyzed patients control robotic limbs, type text, and even speak. For people who have lost motor function, these interfaces are life-changing.</p>
+      <ul>
+        <li>Non-invasive EEG headsets for gaming and focus applications</li>
+        <li>Surgical implants restoring communication for paralyzed patients</li>
+        <li>Hybrid interfaces combining eye-tracking with neural signals</li>
+        <li>Early commercial trials for consumer neurofeedback devices</li>
+      </ul>
+
+      <h2>The Design Challenge</h2>
+      <p>Here's the part that doesn't get discussed enough: the interface problem isn't just a hardware problem. It's a design problem. Even if we had perfect neural signal detection tomorrow, we would still need to figure out what to do with that signal. These are fundamentally human questions, requiring expertise not just from engineers but from designers, psychologists, and neuroscientists.</p>
+    </div>
+
+    <div class="blog-actions">
+      <button class="action-btn" id="likeBtn" onclick="document.getElementById('likeBtn').classList.toggle('liked')">
+        ♥ <span id="likeCount">3,214</span> Likes
+      </button>
+      <button class="action-btn" data-scroll-to="commentsSection">💬 148 Comments</button>
+      <button class="action-btn" id="shareBtn">↗ Share</button>
+    </div>
+
+    <div style="margin-bottom:36px">
+      <h4 style="font-size:.73rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-muted);margin-bottom:12px">Tags</h4>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <span class="tag cat-tech">AI</span>
+        <span class="tag">Future</span>
+        <span class="tag">UX</span>
+        <span class="tag">Neuroscience</span>
+        <span class="tag">Technology</span>
+      </div>
+    </div>
+
+    <!-- COMMENTS -->
+    <div class="comments-section" id="commentsSection">
+      <h3>148 Comments</h3>
+      <div class="comment-form-wrap">
+        <h4>Share your thoughts</h4>
+        <form id="commentForm">
+          <textarea class="form-textarea" id="commentTextarea" placeholder="What do you think about this story?"></textarea>
+          <div style="display:flex;justify-content:flex-end;margin-top:12px">
+            <button type="submit" class="btn btn-primary">Post Comment</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="commentsList">
+        <div class="comment">
+          <div class="comment-avatar-wrap"><div class="avatar-placeholder avatar-sm" style="background:linear-gradient(135deg,#43e97b,#38f9d7)">L</div></div>
+          <div class="comment-content">
+            <div class="comment-header"><strong>Lena Park</strong><time>2 days ago</time></div>
+            <p>Fantastic piece, Arjun. The Weiser quote is so apt — the best interfaces become invisible. I'm particularly interested in the design challenge you mention.</p>
+            <div class="comment-actions">
+              <button class="comment-action-btn">♥ 24</button>
+              <button class="comment-action-btn">Reply</button>
+            </div>
+          </div>
+        </div>
+        <div class="comment">
+          <div class="comment-avatar-wrap"><div class="avatar-placeholder avatar-sm" style="background:linear-gradient(135deg,#667eea,#764ba2)">V</div></div>
+          <div class="comment-content">
+            <div class="comment-header"><strong>Vikram Shah</strong><time>1 day ago</time></div>
+            <p>The paralysis applications are already so powerful. I watched a demo video of a patient spelling words using only brain signals — it was genuinely moving.</p>
+            <div class="comment-actions">
+              <button class="comment-action-btn">♥ 17</button>
+              <button class="comment-action-btn">Reply</button>
+            </div>
+          </div>
+        </div>
+        <div class="comment">
+          <div class="comment-avatar-wrap"><div class="avatar-placeholder avatar-sm" style="background:linear-gradient(135deg,#fa709a,#fee140)">P</div></div>
+          <div class="comment-content">
+            <div class="comment-header"><strong>Priya Nair</strong><time>12 hours ago</time></div>
+            <p>The privacy implications alone keep me up at night. If interfaces can read our intent — even passively — what happens to the thoughts we keep private?</p>
+            <div class="comment-actions">
+              <button class="comment-action-btn">♥ 41</button>
+              <button class="comment-action-btn">Reply</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- SIDEBAR -->
+  <aside class="blog-sidebar">
+    <div class="sidebar-widget" style="text-align:center">
+      <h4>About the Author</h4>
+      <div class="avatar-placeholder avatar-lg" style="background:linear-gradient(135deg,#f093fb,#f5576c);margin:0 auto 12px">A</div>
+      <strong style="font-size:.98rem">Arjun Mehta</strong>
+      <p style="font-size:.8rem;color:var(--ink-muted);margin:6px 0 14px;line-height:1.6">Tech writer and product thinker. Writing at the intersection of technology and human experience.</p>
+      <div style="display:flex;gap:16px;justify-content:center;font-size:.75rem;color:var(--ink-muted);margin-bottom:14px">
+        <span><strong>48</strong> posts</span><span><strong>12.4k</strong> followers</span>
+      </div>
+      <button class="follow-btn" style="max-width:160px;margin:0 auto;display:block" onclick="toggleFollow(this)">Follow</button>
+    </div>
+
+    <div class="sidebar-widget">
+      <h4>Related Stories</h4>
+      <div class="related-item" onclick="location.href='{% url 'blog_detail'%}'">
+        <img class="related-thumb" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=150&q=80" alt="">
+        <div><h5>Why Every Developer Should Learn Design Thinking</h5><p>Vikram Shah · 7 min</p></div>
+      </div>
+      <div class="related-item" onclick="location.href='{% url 'blog_detail'%}'">
+        <img class="related-thumb" src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=150&q=80" alt="">
+        <div><h5>The Quiet Revolution in Typography</h5><p>Arjun Mehta · 5 min</p></div>
+      </div>
+      <div class="related-item" onclick="location.href='{% url 'blog_detail'%}'">
+        <img class="related-thumb" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&q=80" alt="">
+        <div><h5>Stoicism in Silicon Valley</h5><p>James Okonkwo · 9 min</p></div>
+      </div>
+    </div>
+
+    <div class="sidebar-widget">
+      <h4>Popular Tags</h4>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <span class="tag cat-tech">AI</span><span class="tag cat-design">Design</span>
+        <span class="tag cat-travel">Travel</span><span class="tag cat-wellness">Wellness</span>
+        <span class="tag">Philosophy</span><span class="tag cat-science">Science</span>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>
+
+{% endblock %}

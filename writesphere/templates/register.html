@@ -1,0 +1,90 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Create Account — WriteSphere</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="auth-layout">
+  <div class="auth-visual">
+    <div class="hero-bg-wrap" style="position:absolute;inset:0;z-index:0"><div class="blob blob-1"></div><div class="blob blob-2"></div><div class="grain"></div></div>
+    <div class="auth-visual-content">
+      <a href="{% url 'index'%}" class="logo">Write<span>Sphere</span></a>
+      <div class="auth-features">
+        <div class="auth-feature"><div class="auth-feature-icon">✍️</div>Write and publish stories</div>
+        <div class="auth-feature"><div class="auth-feature-icon">👥</div>Build a loyal readership</div>
+        <div class="auth-feature"><div class="auth-feature-icon">💬</div>Engage with other writers</div>
+        <div class="auth-feature"><div class="auth-feature-icon">📊</div>Track your story performance</div>
+      </div>
+      
+    </div>
+  </div>
+
+  <div class="auth-form-side">
+    <div class="auth-form-inner">
+      <a href="{% url 'index'%}" class="logo">Write<span>Sphere</span></a>
+      <h2>Start your journey</h2>
+      <p>Create your free account and start writing today.</p>
+
+      <button class="google-btn" type="button">
+        <svg width="18" height="18" viewBox="0 0 18 18">
+          <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908C16.658 14.013 17.64 11.706 17.64 9.2z" fill="#4285F4"/>
+          <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
+          <path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
+          <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+        </svg>
+        Continue with Google
+      </button>
+      <div class="auth-divider">or create with email</div>
+      <div>
+         <p style="color:red; font-size:.85rem; text-align:center;">
+          {{ msg }}
+        </p>
+      </div>
+
+      <form method="POST" action={% url 'register'%} enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-row">
+          <div class="form-group"><label>First Name</label><input type="text" class="form-input" placeholder="Jane" name="fname" required ></div>
+          <div class="form-group"><label>Last Name</label><input type="text" class="form-input" placeholder="Smith" name="lname" required></div>
+        </div>
+        <div class="form-group"><label>Username</label><input type="text" class="form-input" placeholder="@janesmith" name="username" required><p class="form-hint">writesphere.com/@janesmith</p></div>
+        <div class="form-group"><label>Email Address</label><input type="email" class="form-input" placeholder="you@example.com" name="email"  required></div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="passwordInput" class="form-input" placeholder="Create a strong password" name="password" required>
+          <div style="margin-top:8px;height:4px;background:rgba(13,11,26,.1);border-radius:4px;overflow:hidden"><div id="strengthBar" style="height:100%;width:0;border-radius:4px;transition:.3s"></div></div>
+          <p class="form-hint"><span id="strengthLabel"></span></p>
+        </div>
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <input type="password" class="form-input" placeholder="Repeat password" name="cpassword" required>
+        </div>
+
+        <div class="form-group">
+      <label>I want to join as</label>
+      <select class="form-input" name="role" required>
+        <option value="" disabled selected>Select your role</option>
+        <option value="reader">📖 Reader — Discover & read stories</option>
+        <option value="author">✍️ Author — Write & publish stories</option>
+      </select>
+    </div>
+        
+
+        <button type="submit" class="btn btn-primary" style="width:100%;padding:14px;font-size:.95rem;margin-bottom:10px">Create Account</button>
+        <p style="font-size:.72rem;color:var(--ink-muted);text-align:center">By signing up you agree to our <a href="#" style="color:var(--accent)">Terms</a> and <a href="#" style="color:var(--accent)">Privacy Policy</a>.</p>
+      </form>
+
+      <div class="auth-switch">Already have an account? <a href="{% url  'login'  %}">Sign in</a></div>
+    </div>
+  </div>
+</div>
+<script src="{% static 'js/main.js' %}"></script>
+
+</body>
+</html>

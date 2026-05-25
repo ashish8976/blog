@@ -1,0 +1,183 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WriteSphere — Where Stories Live</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<style>
+  .profile-dropdown-wrapper { position: relative; }
+  .nav-avatar-btn { background: none; border: none; cursor: pointer; padding: 0; display: flex; align-items: center; }
+  .nav-avatar-btn:hover .nav-avatar,
+  .nav-avatar-btn:hover .nav-avatar-placeholder { border-color: var(--accent); transform: scale(1.07); }
+  .profile-dropdown-menu {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 10px);
+    background: #fff;
+    border: 1px solid rgba(13,11,26,.12);
+    border-radius: 14px;
+    min-width: 175px;
+    box-shadow: 0 16px 56px rgba(13,11,26,.14);
+    z-index: 9999;
+    overflow: hidden;
+  }
+  .profile-dropdown-menu.open { display: flex; }
+  .profile-dropdown-menu a {
+    padding: 12px 18px;
+    font-size: .88rem;
+    font-weight: 500;
+    color: #5a5675;
+    text-decoration: none;
+    transition: background .2s, color .2s;
+    display: block;
+  }
+  .profile-dropdown-menu a:hover { background: rgba(13,11,26,.04); color: #0d0b1a; }
+  .profile-dropdown-menu a:last-child { border-top: 1px solid rgba(13,11,26,.07); color: #c94b2a; }
+  .profile-dropdown-menu a:last-child:hover { background: rgba(201,75,42,.08); }
+</style>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="{% url 'index' %}" class="logo">Write<span>Sphere</span></a>
+
+    <ul class="nav-links">
+      {% if request.session.user_email %}
+        {% if request.session.user_role == 'author' %}
+          <li><a href="{% url 'index' %}">Home</a></li>
+          <li><a href="{% url 'explore' %}">Explore</a></li>
+          <li><a href="{% url 'author' %}">Authors</a></li>
+          <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+        {% elif request.session.user_role == 'reader' %}
+          <li><a href="{% url 'index' %}">Home</a></li>
+          <li><a href="{% url 'explore' %}">Explore</a></li>
+          <li><a href="{% url 'author' %}">Authors</a></li>
+          <li><a href="{% url 'category' %}">Topics</a></li>
+        {% endif %}
+      {% else %}
+        <li><a href="{% url 'index' %}">Home</a></li>
+        <li><a href="{% url 'explore' %}">Explore</a></li>
+        <li><a href="{% url 'author' %}">Authors</a></li>
+      {% endif %}
+    </ul>
+
+    <div class="nav-actions">
+      {% if request.session.user_email %}
+
+        {% if request.session.user_role == 'author' %}
+          <a href="{% url 'create_post' %}" class="btn btn-create-post">Create Post</a>
+        {% endif %}
+
+        <!-- Profile Dropdown -->
+        <div class="profile-dropdown-wrapper">
+          <button class="nav-avatar-btn" id="profileDropdownBtn">
+            {% if request.session.user_image %}
+              <img src="{{ request.session.user_image }}" alt="Profile" class="nav-avatar">
+            {% else %}
+              <div class="nav-avatar nav-avatar-placeholder">
+                {{ request.session.user_name|first|upper }}
+              </div>
+            {% endif %}
+          </button>
+
+          <div class="profile-dropdown-menu" id="profileDropdownMenu">
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            <a href="{% url 'profile' %}">Account</a>
+            <a href="{% url 'logout' %}">Logout</a>
+          </div>
+        </div>
+
+      {% else %}
+        <a href="{% url 'login' %}" class="btn btn-ghost">Sign In</a>
+        <a href="{% url 'register' %}" class="btn btn-primary">Get Started</a>
+      {% endif %}
+    </div>
+
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <!-- Mobile Menu — role-wise -->
+  <div class="mobile-menu" id="mobileMenu">
+    {% if request.session.user_email %}
+      {% if request.session.user_role == 'author' %}
+        <a href="{% url 'index' %}">Home</a>
+        <a href="{% url 'explore' %}">Explore</a>
+        <a href="{% url 'author' %}">Authors</a>
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'create_post' %}">Create Post</a>
+        <a href="{% url 'profile' %}">Account</a>
+        <a href="{% url 'logout' %}">Logout</a>
+      {% elif request.session.user_role == 'reader' %}
+        <a href="{% url 'index' %}">Home</a>
+        <a href="{% url 'explore' %}">Explore</a>
+        <a href="{% url 'author' %}">Authors</a>
+        <a href="{% url 'category' %}">Topics</a>
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'profile' %}">Account</a>
+        <a href="{% url 'logout' %}">Logout</a>
+      {% endif %}
+    {% else %}
+      <a href="{% url 'index' %}">Home</a>
+      <a href="{% url 'explore' %}">Explore</a>
+      <a href="{% url 'author' %}">Authors</a>
+      <a href="{% url 'login' %}">Sign In</a>
+      <a href="{% url 'register' %}">Get Started</a>
+    {% endif %}
+  </div>
+</nav>
+
+{% block content %}
+{% endblock %}
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="{% url 'index' %}" class="logo">Write<span>Sphere</span></a>
+        <p>A community for writers who believe in the power of authentic storytelling.</p>
+        <div class="socials">
+          <a href="#" class="social-btn">𝕏</a>
+          <a href="#" class="social-btn">in</a>
+          <a href="#" class="social-btn">ig</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Platform</h5>
+        <a href="{% url 'explore' %}">Explore</a>
+        <a href="#">Trending</a>
+        <a href="{% url 'category' %}">Topics</a>
+      </div>
+      <div class="footer-col">
+        <h5>Writers</h5>
+        <a href="{% url 'register' %}">Start Writing</a>
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'create_post' %}">New Post</a>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a href="#">About</a>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 WriteSphere. Built with ♥ for storytellers.</p>
+      <p>A BlogX Solutions Product</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<!-- HERO -->
+<div class="authors-page-hero">
+  <div class="container">
+    <p class="eyebrow">✦ Community</p>
+    <h1>Discover <em>Authors</em></h1>
+    <p style="color:var(--ink-muted);margin-top:6px">Follow the voices that move, inspire, and challenge you.</p>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<section class="section-sm">
+  <div class="container">
+
+    <!-- STATS BAR -->
+    <div class="authors-stats">
+      <div class="stat-item">
+        <strong id="totalCount">12</strong>
+        <span>Total Authors</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <strong id="followingCount">0</strong>
+        <span>You Follow</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <strong>48.2k</strong>
+        <span>Total Stories</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <strong>2.4M</strong>
+        <span>Total Readers</span>
+      </div>
+      <p class="following-note">Following <strong id="followingNote">0</strong> authors</p>
+    </div>
+
+    <!-- TABS -->
+    <div class="authors-tabs">
+      <button class="atab active" onclick="switchTab(this, 'all')">All Authors</button>
+      <button class="atab" onclick="switchTab(this, 'following')">Following</button>
+      <button class="atab" onclick="switchTab(this, 'trending')">Trending</button>
+    </div>
+
+    <!-- FEATURED AUTHORS -->
+    <div class="featured-author-section" id="featuredSection">
+      <h2>⭐ Featured This Week</h2>
+      <div class="featured-strip" id="featuredStrip"></div>
+    </div>
+
+    <!-- FILTER BAR -->
+<div class="authors-filter-bar">
+  <div class="container">
+    <div class="filter-row">
+      <button class="filter-chip active" onclick="filterCategory(this, 'all')">All</button>
+      <button class="filter-chip" onclick="filterCategory(this, 'tech')">Technology</button>
+      <button class="filter-chip" onclick="filterCategory(this, 'travel')">Travel</button>
+      <button class="filter-chip" onclick="filterCategory(this, 'wellness')">Wellness</button>
+      <button class="filter-chip" onclick="filterCategory(this, 'design')">Design</button>
+      <button class="filter-chip" onclick="filterCategory(this, 'philosophy')">Philosophy</button>
+      <button class="filter-chip" onclick="filterCategory(this, 'fiction')">Fiction</button>
+      <div class="author-search-wrap" style="margin-left:auto">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="authorSearch" placeholder="Search authors..." oninput="searchAuthors(this.value)">
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- ALL AUTHORS GRID -->
+    <div class="section-heading">
+      <h2 id="gridTitle">All Authors</h2>
+      <span class="count-badge" id="gridCount">12 authors</span>
+    </div>
+    <div class="authors-main-grid" id="authorsGrid"></div>
+
+    <!-- EMPTY STATE -->
+    <div class="empty-state" id="emptyState" style="display:none">
+      <div class="empty-icon">👥</div>
+      <h3>No authors found</h3>
+      <p>Try a different search or category filter.</p>
+    </div>
+
+  </div>
+</section>
+<script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>
+{% endblock %}

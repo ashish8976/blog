@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-wrap">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="grain"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">✦ A Community for Writers</div>
+    <h1 class="hero-title">Where Every<br><em>Story</em> Finds<br>Its Reader</h1>
+    <p class="hero-sub">Join thousands of writers sharing ideas, stories, and perspectives. Publish your voice — the world is listening.</p>
+    <div class="hero-cta">
+      <a href="{% url 'register'%}" class="btn btn-primary btn-lg">Begin Your Journey</a>
+      <a href="{% url 'explore'%}" class="btn btn-outline btn-lg">Explore Stories →</a>
+    </div>
+    <div class="hero-stats">
+      <div><span class="stat-num">12K+</span><span class="stat-label">Authors</span></div>
+      <div class="stat-divider"></div>
+      <div><span class="stat-num">84K</span><span class="stat-label">Stories</span></div>
+      <div class="stat-divider"></div>
+      <div><span class="stat-num">2.1M</span><span class="stat-label">Readers</span></div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="float-card fc-a" onclick="location.href='{% url 'blog_detail'%}'">
+      <img class="fc-img" src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=400&q=80" alt="">
+      <div class="fc-body">
+        <div class="fc-cat">Technology</div>
+        <div class="fc-title">The Future of Human Creativity in the Age of AI</div>
+        <div class="fc-author">
+          <div class="avatar-placeholder avatar-xs" style="background:linear-gradient(135deg,#f093fb,#f5576c)">M</div>
+          Maya Chen
+        </div>
+      </div>
+    </div>
+    <div class="float-card fc-b" onclick="location.href='{% url 'blog_detail'%}'">
+      <div class="fc-body">
+        <div class="fc-cat g">Travel</div>
+        <div class="fc-title">48 Hours in Kyoto: A Temple Pilgrim's Diary</div>
+        <div class="fc-likes">♥ 2.4k likes</div>
+      </div>
+    </div>
+    <div class="float-card fc-c" onclick="location.href='{% url 'blog_detail'%}'">
+      <img class="fc-img" src="https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400&q=80" alt="">
+      <div class="fc-body">
+        <div class="fc-cat b">Life</div>
+        <div class="fc-title">Morning Pages Changed My Life</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-track">
+    <span>Technology</span><span class="ticker-dot">✦</span>
+    <span>Travel</span><span class="ticker-dot">✦</span>
+    <span>Wellness</span><span class="ticker-dot">✦</span>
+    <span>Culture</span><span class="ticker-dot">✦</span>
+    <span>Science</span><span class="ticker-dot">✦</span>
+    <span>Fiction</span><span class="ticker-dot">✦</span>
+    <span>Philosophy</span><span class="ticker-dot">✦</span>
+    <span>Design</span><span class="ticker-dot">✦</span>
+    <span>Technology</span><span class="ticker-dot">✦</span>
+    <span>Travel</span><span class="ticker-dot">✦</span>
+    <span>Wellness</span><span class="ticker-dot">✦</span>
+    <span>Culture</span><span class="ticker-dot">✦</span>
+    <span>Science</span><span class="ticker-dot">✦</span>
+    <span>Fiction</span><span class="ticker-dot">✦</span>
+    <span>Philosophy</span><span class="ticker-dot">✦</span>
+    <span>Design</span><span class="ticker-dot">✦</span>
+  </div>
+</div>
+
+<!-- FEATURED POSTS -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <p class="eyebrow">✦ Editor's Picks</p>
+        <h2 class="section-title">Featured <em>Stories</em></h2>
+      </div>
+      <a href="{% url 'explore'%}" class="btn btn-ghost">View All →</a>
+    </div>
+    <div class="featured-grid">
+      <!-- Main Post -->
+      <article class="post-card featured-main" onclick="location.href='{% url 'blog_detail'%}'">
+        <div class="post-img-wrap">
+          <img class="post-img" src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80" alt="">
+          <span class="post-cat-pin">Technology</span>
+        </div>
+        <div class="post-body">
+          <div class="post-meta-row">
+            <div class="author-pill">
+              <div class="avatar-placeholder avatar-sm" style="background:linear-gradient(135deg,#f093fb,#f5576c)">A</div>
+              Arjun Mehta
+            </div>
+            <span class="post-date">March 3, 2026</span>
+          </div>
+          <h3 class="post-title lg">Building the Next Generation of Human-Computer Interfaces</h3>
+          <p class="post-excerpt">As neural interfaces advance, we're approaching a moment where thought and machine become indistinguishable. Here's what that means for all of us...</p>
+          <div class="post-footer">
+            <div class="post-tags-row">
+              <span class="tag cat-tech">AI</span>
+              <span class="tag">Future</span>
+              <span class="tag">UX</span>
+            </div>
+            <div class="post-stats">
+              <span>♥ 3.2k</span><span>💬 148</span><span>8 min</span>
+            </div>
+          </div>
+        </div>
+      </article>
+      <!-- Side Posts -->
+      <div class="featured-side">
+        <article class="post-card horizontal" onclick="location.href='{% url 'blog_detail'%}'">
+          <div class="post-img-wrap"><img class="post-img" src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&q=80" alt=""><span class="post-cat-pin">Travel</span></div>
+          <div class="post-body">
+            <div class="post-meta-row"><div class="author-pill"><div class="avatar-placeholder avatar-sm" style="background:linear-gradient(135deg,#43e97b,#38f9d7)">L</div>Lena Park</div><span class="post-date">Feb 28</span></div>
+            <h3 class="post-title">48 Hours in Kyoto: Temples, Tofu & Quiet Mornings</h3>
+            <div class="post-stats"><span>♥ 1.8k</span><span>💬 67</span><span>5 min</span></div>
+          </div>
+        </article>
+        <article class="post-card horizontal" onclick="location.href='{% url 'blog_detail'%}'">
+          <div class="post-img-wrap"><img class="post-img" src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&q=80" alt=""><span class="post-cat-pin">Wellness</span></div>
+          <div class="post-body">
+            <div class="post-meta-row"><div class="author-pill"><div class="avatar-placeholder avatar-sm" style="background:linear-gradient(135deg,#fa709a,#fee140)">P</div>Priya Nair</div><span class="post-date">Feb 25</span></div>
+            <h3 class="post-title">The Science of Rest: Why Doing Nothing Is Productive</h3>
+            <div class="post-stats"><span>♥ 2.1k</span><span>💬 93</span><span>6 min</span></div>
+          </div>
+        </article>
+        <article class="post-card horizontal" onclick="location.href='{% url 'blog_detail'%}'">
+          <div class="post-img-wrap"><img class="post-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80" alt=""><span class="post-cat-pin">Philosophy</span></div>
+          <div class="post-body">
+            <div class="post-meta-row"><div class="author-pill"><div class="avatar-placeholder avatar-sm" style="background:linear-gradient(135deg,#4facfe,#00f2fe)">J</div>James Okonkwo</div><span class="post-date">Feb 22</span></div>
+            <h3 class="post-title">Stoicism in Silicon Valley: Ancient Wisdom for Modern Chaos</h3>
+            <div class="post-stats"><span>♥ 4.5k</span><span>💬 212</span><span>9 min</span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="section section-dark">
+  <div class="container">
+    <div class="section-header">
+      <div><p class="eyebrow light">✦ Browse by Topic</p><h2 class="section-title light">Explore <em>Categories</em></h2></div>
+    </div>
+    <div class="categories-grid">
+      <a href="{% url 'explore'%}" class="cat-card" style="--c:#f093fb"><div class="cat-icon">💻</div><h3>Technology</h3><p></p><div class="cat-arrow">→</div></a>
+      <a href="{% url 'explore'%}" class="cat-card" style="--c:#43e97b"><div class="cat-icon">✈️</div><h3>Travel</h3><p></p><div class="cat-arrow">→</div></a>
+      <a href="{% url 'explore'%}" class="cat-card" style="--c:#fa709a"><div class="cat-icon">🧘</div><h3>Wellness</h3><p></p><div class="cat-arrow">→</div></a>
+      <a href="{% url 'explore'%}" class="cat-card" style="--c:#fee140"><div class="cat-icon">🎨</div><h3>Design</h3><p></p><div class="cat-arrow">→</div></a>
+      <a href="{% url 'explore'%}" class="cat-card" style="--c:#4facfe"><div class="cat-icon">🔬</div><h3>Science</h3><p></p><div class="cat-arrow">→</div></a>
+      <a href="{% url 'explore'%}" class="cat-card" style="--c:#f5576c"><div class="cat-icon">📖</div><h3>Fiction</h3><p></p><div class="cat-arrow">→</div></a>
+      <a href="{% url 'explore'%}" class="cat-card" style="--c:#a18cd1"><div class="cat-icon">🧠</div><h3>Philosophy</h3><p></p><div class="cat-arrow">→</div></a>
+      <a href="{% url 'explore'%}" class="cat-card" style="--c:#fda085"><div class="cat-icon">🌍</div><h3>Culture</h3><p></p><div class="cat-arrow">→</div></a>
+    </div>
+  </div>
+</section>
+
+<!-- TRENDING -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div><p class="eyebrow">✦ This Week</p><h2 class="section-title">Trending <em>Now</em></h2></div>
+      <a href="{% url 'explore'%}" class="btn btn-ghost">View All →</a>
+    </div>
+    <div class="trend-list">
+      <article class="trend-item" onclick="location.href='{% url 'blog_detail'%}'">
+        <span class="trend-num">01</span>
+        <div class="trend-body">
+          <div class="trend-meta"><span class="tag cat-tech">Technology</span><span class="post-date">Mar 5</span></div>
+          <h3>Why Every Developer Should Learn Design Thinking</h3>
+          <div class="author-pill" style="font-size:.78rem"><div class="avatar-placeholder avatar-xs" style="background:linear-gradient(135deg,#667eea,#764ba2)">V</div>Vikram Shah</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0">
+          <span class="trend-stat">♥ 5.2k</span>
+          <img class="trend-thumb" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=150&q=80" alt="">
+        </div>
+      </article>
+      <article class="trend-item" onclick="location.href='{% url 'blog_detail'%}'">
+        <span class="trend-num">02</span>
+        <div class="trend-body">
+          <div class="trend-meta"><span class="tag cat-travel">Travel</span><span class="post-date">Mar 4</span></div>
+          <h3>The Last Wild Places: A Photographer's Journey Through Patagonia</h3>
+          <div class="author-pill" style="font-size:.78rem"><div class="avatar-placeholder avatar-xs" style="background:linear-gradient(135deg,#43e97b,#38f9d7)">S</div>Sofia Reyes</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0">
+          <span class="trend-stat">♥ 3.8k</span>
+          <img class="trend-thumb" src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=150&q=80" alt="">
+        </div>
+      </article>
+      <article class="trend-item" onclick="location.href='{% url 'blog_detail'%}'">
+        <span class="trend-num">03</span>
+        <div class="trend-body">
+          <div class="trend-meta"><span class="tag cat-wellness">Wellness</span><span class="post-date">Mar 3</span></div>
+          <h3>I Tracked My Sleep for 90 Days — Here's What I Found</h3>
+          <div class="author-pill" style="font-size:.78rem"><div class="avatar-placeholder avatar-xs" style="background:linear-gradient(135deg,#fa709a,#fee140)">P</div>Priya Nair</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0">
+          <span class="trend-stat">♥ 2.9k</span>
+          <img class="trend-thumb" src="https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=150&q=80" alt="">
+        </div>
+      </article>
+      <article class="trend-item" onclick="location.href='{% url 'blog_detail'%}'">
+        <span class="trend-num">04</span>
+        <div class="trend-body">
+          <div class="trend-meta"><span class="tag cat-design">Design</span><span class="post-date">Mar 2</span></div>
+          <h3>The Quiet Revolution in Typography That Nobody's Talking About</h3>
+          <div class="author-pill" style="font-size:.78rem"><div class="avatar-placeholder avatar-xs" style="background:linear-gradient(135deg,#f093fb,#f5576c)">A</div>Arjun Mehta</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0">
+          <span class="trend-stat">♥ 1.7k</span>
+          <img class="trend-thumb" src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=150&q=80" alt="">
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- AUTHORS -->
+<section class="section" style="background:var(--paper-warm)">
+  <div class="container">
+    <div class="section-header">
+      <div><p class="eyebrow">✦ Community</p><h2 class="section-title">Meet the <em>Authors</em></h2></div>
+      <a href="{% url 'author'%}" class="btn btn-ghost">All Authors →</a>
+    </div>
+    <div class="authors-grid">
+      <div class="author-card" onclick="location.href='{% url 'profile'%}'">
+        <div class="author-cover" style="background:linear-gradient(135deg,#667eea,#764ba2)"></div>
+        <div class="author-avatar-wrap"><div class="avatar-placeholder avatar-lg" style="background:linear-gradient(135deg,#f093fb,#f5576c);border:3px solid white;box-shadow:0 4px 14px rgba(0,0,0,.15)">A</div></div>
+        <div class="author-body"><h4>Arjun Mehta</h4><p class="role">Tech & Philosophy</p><div class="author-nums"><span><strong>48</strong> posts</span><span><strong>12.4k</strong> followers</span></div><button class="follow-btn">Follow</button></div>
+      </div>
+      <div class="author-card" onclick="location.href='{% url 'profile'%}'">
+        <div class="author-cover" style="background:linear-gradient(135deg,#43e97b,#38f9d7)"></div>
+        <div class="author-avatar-wrap"><div class="avatar-placeholder avatar-lg" style="background:linear-gradient(135deg,#43e97b,#38f9d7);border:3px solid white;box-shadow:0 4px 14px rgba(0,0,0,.15)">L</div></div>
+        <div class="author-body"><h4>Lena Park</h4><p class="role">Travel & Culture</p><div class="author-nums"><span><strong>63</strong> posts</span><span><strong>9.1k</strong> followers</span></div><button class="follow-btn">Follow</button></div>
+      </div>
+      <div class="author-card" onclick="location.href='{% url 'profile'%}'">
+        <div class="author-cover" style="background:linear-gradient(135deg,#fa709a,#fee140)"></div>
+        <div class="author-avatar-wrap"><div class="avatar-placeholder avatar-lg" style="background:linear-gradient(135deg,#fa709a,#fee140);border:3px solid white;box-shadow:0 4px 14px rgba(0,0,0,.15)">P</div></div>
+        <div class="author-body"><h4>Priya Nair</h4><p class="role">Wellness & Science</p><div class="author-nums"><span><strong>37</strong> posts</span><span><strong>15.2k</strong> followers</span></div><button class="follow-btn following">Following</button></div>
+      </div>
+      <div class="author-card" onclick="location.href='{% url 'profile'%}'">
+        <div class="author-cover" style="background:linear-gradient(135deg,#4facfe,#00f2fe)"></div>
+        <div class="author-avatar-wrap"><div class="avatar-placeholder avatar-lg" style="background:linear-gradient(135deg,#4facfe,#00f2fe);border:3px solid white;box-shadow:0 4px 14px rgba(0,0,0,.15)">J</div></div>
+        <div class="author-body"><h4>James Okonkwo</h4><p class="role">Philosophy & Fiction</p><div class="author-nums"><span><strong>29</strong> posts</span><span><strong>7.8k</strong> followers</span></div><button class="follow-btn">Follow</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+ {% if not request.session.user_email %}
+<section class="cta-section">
+  <div class="hero-bg-wrap"><div class="blob blob-1"></div><div class="blob blob-2"></div><div class="grain"></div></div>
+  <div class="container cta-inner">
+    <p class="eyebrow light">✦ Join WriteSphere</p>
+    <h2 class="cta-title">Your <em>Story</em><br>Deserves to Be Heard</h2>
+    <p class="cta-sub">Start writing today. Build your audience. Connect with fellow creators who share your passion.</p>
+    <a href="{% url 'register'%}" class="btn btn-accent btn-lg">Create Your Free Account</a>
+  </div>
+</section>
+{% endif %}
+
+<script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>
+{% endblock %}

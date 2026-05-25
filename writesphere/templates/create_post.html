@@ -1,0 +1,136 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>New Post — WriteSphere</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="{% url 'index'%}" class="logo">Write<span>Sphere</span></a>
+    <ul class="nav-links">
+      
+    </ul>
+    <div class="nav-actions">
+      <span id="saveStatus" style="font-size:.8rem;color:var(--ink-muted)">All changes saved</span>
+      <a href="{% url 'index'%}" class="btn btn-ghost btn-sm">← Back</a>
+    </div>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="{% url 'dashboard'%}">Dashboard</a>
+  </div>
+</nav>
+
+<form method="POST" enctype="multipart/form-data" class="create-layout">
+    {% csrf_token %}
+  <!-- EDITOR -->
+  <div class="create-main">
+    <input type="text" id="postTitle" class="create-title-input" placeholder="Your story title..." name="post_title">
+
+    <!-- TOOLBAR -->
+    <div class="editor-toolbar">
+      <button class="tb-btn" data-cmd="bold" title="Bold"><strong>B</strong></button>
+      <button class="tb-btn" data-cmd="italic" title="Italic"><em>I</em></button>
+      <button class="tb-btn" data-cmd="underline" title="Underline"><u>U</u></button>
+      <div class="tb-sep"></div>
+      <button class="tb-btn" data-cmd="formatBlock" data-val="h2" title="Heading 2">H2</button>
+      <button class="tb-btn" data-cmd="formatBlock" data-val="h3" title="Heading 3">H3</button>
+      <div class="tb-sep"></div>
+      <button class="tb-btn" data-cmd="formatBlock" data-val="blockquote" title="Quote">"</button>
+      <button class="tb-btn" data-cmd="insertUnorderedList" title="Bullet List">• List</button>
+      <button class="tb-btn" data-cmd="insertOrderedList" title="Numbered List">1. List</button>
+      <div class="tb-sep"></div>
+      <button class="tb-btn" onclick="insertLink()" title="Link">🔗 Link</button>
+      <button class="tb-btn" onclick="insertCode()" title="Code">&lt;/&gt;</button>
+    </div>
+
+    <div id="editorBody" class="editor-body" contenteditable="true" spellcheck="true"></div>
+    <input type="hidden" name="post_desc" id="hiddenPostDesc">
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="create-sidebar">
+    <!-- Publish -->
+    <div class="side-card">
+      <h4>Publish Settings</h4>
+      <div class="publish-row">
+        <button type="button" class="btn-draft"> Cencle </button>
+        <button type="submit" class="btn-publish" id="publishBtn">Publish Story →</button>
+      </div>
+    </div>
+
+    <!-- Cover Image -->
+    <div class="side-card">
+      <h4>Cover Image</h4>
+      <div class="upload-drop" id="uploadDrop">
+        <div class="ud-icon">📷</div>
+        <p>Click or drag to upload</p>
+        <small>PNG, JPG up to 5MB</small>
+      </div>
+      <input type="file" id="coverFileInput" accept="image/*" style="display:none" name="post_image">
+    </div>
+
+    <!-- Category -->
+    <div class="side-card">
+      <h4>Category</h4>
+      <select class="side-select" name="post_category">
+        <option value="">Select category...</option>
+        <option>Technology</option>
+        <option>Travel</option>
+        <option>Wellness</option>
+        <option>Design</option>
+        <option>Science</option>
+        <option>Fiction</option>
+        <option>Philosophy</option>
+        <option>Culture</option>
+      </select>
+    </div>
+
+    <!-- Tags -->
+    <div class="side-card">
+      <h4>Tags</h4>
+      <div class="tag-input-area" id="tagInputWrap">
+        <input type="text" id="tagField" class="tag-input-field" name="tags">
+      </div>
+      <p style="font-size:.72rem;color:var(--ink-muted);margin-top:6px">Press Enter or comma to add a tag</p>
+    </div>
+
+    <!-- SEO Preview -->
+    <div class="side-card">
+      <h4>SEO Preview</h4>
+      <div class="seo-preview">
+        <div class="seo-url">writesphere.com/post/your-story-slug</div>
+        <div class="seo-title" id="seoTitle">Your story title...</div>
+        <div class="seo-desc" id="seoDesc">Your story excerpt will appear here in search results...</div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<script src="{% static 'js/main.js' %}"></script>
+<script>
+function insertLink() {
+  const url = prompt('Enter URL:');
+  if (!url) return;
+  const sel = window.getSelection();
+  const text = sel.toString() || 'link text';
+  document.execCommand('insertHTML', false, `<a href="${url}" target="_blank" style="color:var(--accent)">${text}</a>`);
+}
+function insertCode() {
+  const sel = window.getSelection().toString() || 'code here';
+  document.execCommand('insertHTML', false, `<code style="font-family:monospace;background:rgba(13,11,26,.07);padding:2px 6px;border-radius:4px">${sel}</code>`);
+}
+document.getElementById("publishBtn").addEventListener("click", function () {
+    document.getElementById("hiddenPostDesc").value =
+        document.getElementById("editorBody").innerHTML;
+});
+</script>
+</body>
+</html>
