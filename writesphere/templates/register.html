@@ -41,29 +41,37 @@
         Continue with Google
       </button>
       <div class="auth-divider">or create with email</div>
-      <div>
-         <p style="color:red; font-size:.85rem; text-align:center;">
-          {{ msg }}
-        </p>
-      </div>
 
       <form method="POST" action={% url 'register'%} enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-row">
-          <div class="form-group"><label>First Name</label><input type="text" class="form-input" placeholder="Jane" name="fname" required ></div>
-          <div class="form-group"><label>Last Name</label><input type="text" class="form-input" placeholder="Smith" name="lname" required></div>
+          <div class="form-group"><label>First Name</label><input type="text" class="form-input" placeholder="Jane" name="fname" required >
+          <span style="color:red; font-size:.8rem">{{ form.fname.errors }}</span>
+          </div>
+          <div class="form-group"><label>Last Name</label><input type="text" class="form-input" placeholder="Smith" name="lname" required>
+          <span style="color:red; font-size:.8rem">{{ form.lname.errors }}</span>
+          </div>
         </div>
-        <div class="form-group"><label>Username</label><input type="text" class="form-input" placeholder="@janesmith" name="username" required><p class="form-hint">writesphere.com/@janesmith</p></div>
-        <div class="form-group"><label>Email Address</label><input type="email" class="form-input" placeholder="you@example.com" name="email"  required></div>
+        <div class="form-group"><label>Username</label><input type="text" class="form-input" placeholder="@janesmith" name="username" required><p class="form-hint">writesphere.com/@janesmith</p>
+        <span style="color:red; font-size:.8rem">{{ form.username.errors }}</span>
+        </div>
+
+        <div class="form-group"><label>Email Address</label><input type="email" class="form-input" placeholder="you@example.com" name="email"  required>
+        <span style="color:red; font-size:.8rem">{{ form.email.errors }}</span>
+        </div>
+
         <div class="form-group">
           <label>Password</label>
           <input type="password" id="passwordInput" class="form-input" placeholder="Create a strong password" name="password" required>
           <div style="margin-top:8px;height:4px;background:rgba(13,11,26,.1);border-radius:4px;overflow:hidden"><div id="strengthBar" style="height:100%;width:0;border-radius:4px;transition:.3s"></div></div>
           <p class="form-hint"><span id="strengthLabel"></span></p>
+          <span style="color:red; font-size:.8rem">{{ form.password.errors }}</span>
         </div>
         <div class="form-group">
           <label>Confirm Password</label>
           <input type="password" class="form-input" placeholder="Repeat password" name="cpassword" required>
+          <span style="color:red; font-size:.8rem">{{ form.cpassword.errors }}</span>
+          <span style="color:red; font-size:.8rem">{{ form.non_field_errors }}</span>
         </div>
 
         <div class="form-group">

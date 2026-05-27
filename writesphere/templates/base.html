@@ -11,6 +11,14 @@
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <style>
+  .nav-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(13,11,26,.12);
+  transition: border-color .2s, transform .2s;
+}
   .profile-dropdown-wrapper { position: relative; }
   .nav-avatar-btn { background: none; border: none; cursor: pointer; padding: 0; display: flex; align-items: center; }
   .nav-avatar-btn:hover .nav-avatar,
@@ -51,7 +59,7 @@
     <a href="{% url 'index' %}" class="logo">Write<span>Sphere</span></a>
 
     <ul class="nav-links">
-      {% if request.session.user_email %}
+      {% if user.is_authenticated %}
         {% if request.session.user_role == 'author' %}
           <li><a href="{% url 'index' %}">Home</a></li>
           <li><a href="{% url 'explore' %}">Explore</a></li>
@@ -71,7 +79,7 @@
     </ul>
 
     <div class="nav-actions">
-      {% if request.session.user_email %}
+      {% if user.is_authenticated %}
 
         {% if request.session.user_role == 'author' %}
           <a href="{% url 'create_post' %}" class="btn btn-create-post">Create Post</a>
@@ -80,13 +88,11 @@
         <!-- Profile Dropdown -->
         <div class="profile-dropdown-wrapper">
           <button class="nav-avatar-btn" id="profileDropdownBtn">
-            {% if request.session.user_image %}
-              <img src="{{ request.session.user_image }}" alt="Profile" class="nav-avatar">
-            {% else %}
-              <div class="nav-avatar nav-avatar-placeholder">
-                {{ request.session.user_name|first|upper }}
-              </div>
-            {% endif %}
+          {% if request.session.user_image %}
+             <img src="{{ request.session.user_image }}" alt="Profile" class="nav-avatar">
+          {% else %}
+              <img src="{% static 'images/myimage.png' %}" alt="Profile" class="nav-avatar">
+          {% endif %}
           </button>
 
           <div class="profile-dropdown-menu" id="profileDropdownMenu">
@@ -109,12 +115,11 @@
 
   <!-- Mobile Menu — role-wise -->
   <div class="mobile-menu" id="mobileMenu">
-    {% if request.session.user_email %}
+    {% if user.is_authenticated %}
       {% if request.session.user_role == 'author' %}
         <a href="{% url 'index' %}">Home</a>
         <a href="{% url 'explore' %}">Explore</a>
         <a href="{% url 'author' %}">Authors</a>
-        <a href="{% url 'dashboard' %}">Dashboard</a>
         <a href="{% url 'create_post' %}">Create Post</a>
         <a href="{% url 'profile' %}">Account</a>
         <a href="{% url 'logout' %}">Logout</a>
@@ -123,7 +128,6 @@
         <a href="{% url 'explore' %}">Explore</a>
         <a href="{% url 'author' %}">Authors</a>
         <a href="{% url 'category' %}">Topics</a>
-        <a href="{% url 'dashboard' %}">Dashboard</a>
         <a href="{% url 'profile' %}">Account</a>
         <a href="{% url 'logout' %}">Logout</a>
       {% endif %}

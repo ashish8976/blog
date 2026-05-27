@@ -1,40 +1,63 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.db.models import Q
-from django.contrib.auth.hashers import make_password
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
 from django.core.mail import send_mail
 from django.conf import settings
 import random
 from . models import User, Post
 import time
+from functools import wraps
+from django.contrib.auth.decorators import login_required
+from .form import * 
 
-# Create your views here.
+
+
+def session_required(view_func):
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        if not request.session.get('user_email'):
+            return redirect('login')
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
+
+def author_required(view_func):
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        if not request.session.get('user_email'):
+            return redirect('login')
+        if request.session.get('user_role') != 'Author':
+            return redirect('index')  
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
+
+def reader_required(view_func):
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        if not request.session.get('user_email'):
+            return redirect('login')
+        if request.session.get('user_role') != 'Reader':
+            return redirect('index')  
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
 
 def register(request):
+    form = RegistrationForm()
     if request.method =="POST":
-        if User.objects.filter(email=request.POST['email']).exists():
-            return render(request, 'register.html', {'msg': 'Email already exists'})
-    
-        if User.objects.filter(username=request.POST['username']).exists():
-            return render(request, 'register.html', {'msg': 'Username already taken, please choose another'})
+        form = RegistrationForm(request.POST, request.FILES)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+            return redirect('login')
+        else:
+            print(form.errors)
+    return render(request,'register.html',{'form':form})
         
-        if request.POST['password'] != request.POST['cpassword']:
-            return render(request,'register.html',{'msg','password and confirm password not match'})
-        
-        User.objects.create(
-            fname=request.POST['fname'],
-            lname=request.POST['lname'],
-            username=request.POST['username'],
-            email=request.POST['email'],
-            password=make_password(request.POST['password']),
-            role=request.POST['role'],
-            profile_photo=request.FILES.get('profile_photo'),
-        )
-        return render(request, 'login.html', {'msg': 'Registration Successful!'})
-    else:
-        return render (request,'register.html')
-
 
 
 
@@ -46,8 +69,8 @@ def login(request):
         try:
             user = User.objects.get(Q(username=login_input) | Q(email=login_input))
 
-            if check_password(login_password,user.password):
-                request.session['user_email']=user.email
+            if user.check_password(login_password):
+                auth_login(request, user)
                 request.session['user_name'] = user.username
                 request.session['user_role'] = user.role
                 request.session['user_image'] = user.profile_photo.url if user.profile_photo else None
@@ -62,8 +85,8 @@ def login(request):
 
 
 def logout(request):
-    request.session.flush()
-    return render(request,'login.html')
+    auth_logout(request)
+    return redirect('login')
 
 def author(request):
     return render(request,'author.html')
@@ -132,7 +155,7 @@ def resetpassword(request):
              cpassword = request.POST.get('cpassword')
 
              if new_password == cpassword :
-                user.password = make_password(new_password)
+                user.set_password(new_password)
                 user.save()
                 del request.session['useremail']
                 return redirect('login')
@@ -144,7 +167,8 @@ def resetpassword(request):
             return render(request,'forget_password.html')
     else:
         return render(request,'resetpassword.html')
-    
+
+ 
 def index(request):
     return render (request,'index.html')
 
@@ -157,11 +181,11 @@ def blog_details(request):
 def category(request):
     return render(request,'category.html')
 
-
+@login_required
 def dashboard(request):
     return render (request, 'dashboard.html')
 
-
+@login_required
 def create_post(request):
     if request.method == "POST":
         Post.objects.create(
@@ -176,9 +200,9 @@ def create_post(request):
     return render(request,'create_post.html')
 
 
-
+@login_required
 def profile(request):
-     user = User.objects.get(email=request.session['user_email'])
+     user = request.user
      if request.method == "POST":
         if request.POST.get('fname'):
              user.fname = request.POST.get('fname')
@@ -198,8 +222,11 @@ def profile(request):
         return redirect('profile')
      
      return render(request, 'profile.html')
+
+
 def edit_profile(request):
     return render(request, 'edit_profile.html')
-        
+
+
 def author_story(request):
     return render(request, 'author_story.html')

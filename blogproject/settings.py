@@ -128,7 +128,14 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'ashishrajput8156@gmail.com'
 EMAIL_HOST_PASSWORD = 'cyqi jjnj jnkm kskm'
 
+AUTH_USER_MODEL = 'writesphere.User' 
 
 
 MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/index/'
+LOGOUT_REDIRECT_URL = '/login/'
+
