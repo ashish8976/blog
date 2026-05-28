@@ -27,7 +27,7 @@
     </div>
   </div>
   <div class="hero-visual">
-    <div class="float-card fc-a" onclick="location.href='{% url 'blog_detail'%}'">
+    <div class="float-card fc-a" onclick="location.href='{% url 'explore'%}'">
       <img class="fc-img" src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=400&q=80" alt="">
       <div class="fc-body">
         <div class="fc-cat">Technology</div>
@@ -38,14 +38,14 @@
         </div>
       </div>
     </div>
-    <div class="float-card fc-b" onclick="location.href='{% url 'blog_detail'%}'">
+    <div class="float-card fc-b" onclick="location.href='{% url 'explore'%}'">
       <div class="fc-body">
         <div class="fc-cat g">Travel</div>
         <div class="fc-title">48 Hours in Kyoto: A Temple Pilgrim's Diary</div>
         <div class="fc-likes">♥ 2.4k likes</div>
       </div>
     </div>
-    <div class="float-card fc-c" onclick="location.href='{% url 'blog_detail'%}'">
+    <div class="float-card fc-c" onclick="location.href='{% url 'explore'%}'">
       <img class="fc-img" src="https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400&q=80" alt="">
       <div class="fc-body">
         <div class="fc-cat b">Life</div>
@@ -55,25 +55,16 @@
   </div>
 </section>
 
+
 <!-- TICKER -->
 <div class="ticker-bar">
   <div class="ticker-track">
-    <span>Technology</span><span class="ticker-dot">✦</span>
-    <span>Travel</span><span class="ticker-dot">✦</span>
-    <span>Wellness</span><span class="ticker-dot">✦</span>
-    <span>Culture</span><span class="ticker-dot">✦</span>
-    <span>Science</span><span class="ticker-dot">✦</span>
-    <span>Fiction</span><span class="ticker-dot">✦</span>
-    <span>Philosophy</span><span class="ticker-dot">✦</span>
-    <span>Design</span><span class="ticker-dot">✦</span>
-    <span>Technology</span><span class="ticker-dot">✦</span>
-    <span>Travel</span><span class="ticker-dot">✦</span>
-    <span>Wellness</span><span class="ticker-dot">✦</span>
-    <span>Culture</span><span class="ticker-dot">✦</span>
-    <span>Science</span><span class="ticker-dot">✦</span>
-    <span>Fiction</span><span class="ticker-dot">✦</span>
-    <span>Philosophy</span><span class="ticker-dot">✦</span>
-    <span>Design</span><span class="ticker-dot">✦</span>
+    {% for category in categories%}
+      <span>{{ category.icon }} {{ category.name }}</span><span class="ticker-dot">✦</span>
+    {% endfor %}
+    {% for category in categories %}
+      <span>{{ category.icon }} {{ category.name }}</span><span class="ticker-dot">✦</span>
+    {% endfor %}
   </div>
 </div>
 
@@ -88,60 +79,65 @@
       <a href="{% url 'explore'%}" class="btn btn-ghost">View All →</a>
     </div>
     <div class="featured-grid">
-      <!-- Main Post -->
-      <article class="post-card featured-main" onclick="location.href='{% url 'blog_detail'%}'">
+      {% for post in posts|slice:":1" %}
+      <article class="post-card featured-main" onclick="location.href='{% url 'blog_details' post.id %}'">
         <div class="post-img-wrap">
-          <img class="post-img" src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80" alt="">
-          <span class="post-cat-pin">Technology</span>
+          {% if post.post_image %}
+            <img class="post-img" src="{{ post.post_image.url }}" alt="{{ post.post_title }}">
+          {% else %}
+            <img class="post-img" src="{% static 'images/myimage.png' %}" alt="default">
+          {% endif %}
+          <span class="post-cat-pin">{{ post.post_category }}</span>
         </div>
         <div class="post-body">
           <div class="post-meta-row">
             <div class="author-pill">
-              <div class="avatar-placeholder avatar-sm" style="background:linear-gradient(135deg,#f093fb,#f5576c)">A</div>
-              Arjun Mehta
+              <div class="avatar-placeholder avatar-sm">{{ post.author.fname|first|upper }}</div>
+              {{ post.author.fname }} {{ post.author.lname }}
             </div>
-            <span class="post-date">March 3, 2026</span>
+            <span class="post-date">{{ post.created_at|date:"M d, Y" }}</span>
           </div>
-          <h3 class="post-title lg">Building the Next Generation of Human-Computer Interfaces</h3>
-          <p class="post-excerpt">As neural interfaces advance, we're approaching a moment where thought and machine become indistinguishable. Here's what that means for all of us...</p>
+          <h3 class="post-title lg">{{ post.post_title }}</h3>
           <div class="post-footer">
             <div class="post-tags-row">
-              <span class="tag cat-tech">AI</span>
-              <span class="tag">Future</span>
-              <span class="tag">UX</span>
+              <span class="tag">{{ post.tags }}</span>
             </div>
             <div class="post-stats">
-              <span>♥ 3.2k</span><span>💬 148</span><span>8 min</span>
+              <span>♥ {{ post.likes.count }}</span>
+              <span>💬 {{ post.comments.count }}</span>
             </div>
           </div>
         </div>
       </article>
-      <!-- Side Posts -->
+      {% endfor %}
+
       <div class="featured-side">
-        <article class="post-card horizontal" onclick="location.href='{% url 'blog_detail'%}'">
-          <div class="post-img-wrap"><img class="post-img" src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&q=80" alt=""><span class="post-cat-pin">Travel</span></div>
+        {% for post in posts|slice:"1:4" %}
+        <article class="post-card horizontal" onclick="location.href='{% url 'blog_details' post.id %}'">
+          <div class="post-img-wrap">
+            {% if post.post_image %}
+              <img class="post-img" src="{{ post.post_image.url }}" alt="">
+            {% else %}
+              <img class="post-img" src="{% static 'images/myimage.png' %}" alt="">
+            {% endif %}
+            <span class="post-cat-pin">{{ post.post_category }}</span>
+          </div>
           <div class="post-body">
-            <div class="post-meta-row"><div class="author-pill"><div class="avatar-placeholder avatar-sm" style="background:linear-gradient(135deg,#43e97b,#38f9d7)">L</div>Lena Park</div><span class="post-date">Feb 28</span></div>
-            <h3 class="post-title">48 Hours in Kyoto: Temples, Tofu & Quiet Mornings</h3>
-            <div class="post-stats"><span>♥ 1.8k</span><span>💬 67</span><span>5 min</span></div>
+            <div class="post-meta-row">
+              <div class="author-pill">
+                <div class="avatar-placeholder avatar-sm">{{ post.author.fname|first|upper }}</div>
+                {{ post.author.fname }}
+              </div>
+              <span class="post-date">{{ post.created_at|date:"M d" }}</span>
+            </div>
+            <h3 class="post-title">{{ post.post_title }}</h3>
+            <div class="post-stats">
+              <span>♥ {{ post.likes.count }}</span>
+              <span>💬 {{ post.comments.count }}</span>
+            </div>
           </div>
         </article>
-        <article class="post-card horizontal" onclick="location.href='{% url 'blog_detail'%}'">
-          <div class="post-img-wrap"><img class="post-img" src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&q=80" alt=""><span class="post-cat-pin">Wellness</span></div>
-          <div class="post-body">
-            <div class="post-meta-row"><div class="author-pill"><div class="avatar-placeholder avatar-sm" style="background:linear-gradient(135deg,#fa709a,#fee140)">P</div>Priya Nair</div><span class="post-date">Feb 25</span></div>
-            <h3 class="post-title">The Science of Rest: Why Doing Nothing Is Productive</h3>
-            <div class="post-stats"><span>♥ 2.1k</span><span>💬 93</span><span>6 min</span></div>
-          </div>
-        </article>
-        <article class="post-card horizontal" onclick="location.href='{% url 'blog_detail'%}'">
-          <div class="post-img-wrap"><img class="post-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80" alt=""><span class="post-cat-pin">Philosophy</span></div>
-          <div class="post-body">
-            <div class="post-meta-row"><div class="author-pill"><div class="avatar-placeholder avatar-sm" style="background:linear-gradient(135deg,#4facfe,#00f2fe)">J</div>James Okonkwo</div><span class="post-date">Feb 22</span></div>
-            <h3 class="post-title">Stoicism in Silicon Valley: Ancient Wisdom for Modern Chaos</h3>
-            <div class="post-stats"><span>♥ 4.5k</span><span>💬 212</span><span>9 min</span></div>
-          </div>
-        </article>
+        {% endfor %}
       </div>
     </div>
   </div>
@@ -152,19 +148,20 @@
   <div class="container">
     <div class="section-header">
       <div><p class="eyebrow light">✦ Browse by Topic</p><h2 class="section-title light">Explore <em>Categories</em></h2></div>
+      <a href="{% url 'category' %}" class="btn btn-ghost">View All →</a>
     </div>
     <div class="categories-grid">
-      <a href="{% url 'explore'%}" class="cat-card" style="--c:#f093fb"><div class="cat-icon">💻</div><h3>Technology</h3><p></p><div class="cat-arrow">→</div></a>
-      <a href="{% url 'explore'%}" class="cat-card" style="--c:#43e97b"><div class="cat-icon">✈️</div><h3>Travel</h3><p></p><div class="cat-arrow">→</div></a>
-      <a href="{% url 'explore'%}" class="cat-card" style="--c:#fa709a"><div class="cat-icon">🧘</div><h3>Wellness</h3><p></p><div class="cat-arrow">→</div></a>
-      <a href="{% url 'explore'%}" class="cat-card" style="--c:#fee140"><div class="cat-icon">🎨</div><h3>Design</h3><p></p><div class="cat-arrow">→</div></a>
-      <a href="{% url 'explore'%}" class="cat-card" style="--c:#4facfe"><div class="cat-icon">🔬</div><h3>Science</h3><p></p><div class="cat-arrow">→</div></a>
-      <a href="{% url 'explore'%}" class="cat-card" style="--c:#f5576c"><div class="cat-icon">📖</div><h3>Fiction</h3><p></p><div class="cat-arrow">→</div></a>
-      <a href="{% url 'explore'%}" class="cat-card" style="--c:#a18cd1"><div class="cat-icon">🧠</div><h3>Philosophy</h3><p></p><div class="cat-arrow">→</div></a>
-      <a href="{% url 'explore'%}" class="cat-card" style="--c:#fda085"><div class="cat-icon">🌍</div><h3>Culture</h3><p></p><div class="cat-arrow">→</div></a>
+      {% for category in categories|slice:":5" %}
+      <a href="{% url 'category' %}" class="cat-card">
+        <div class="cat-icon">{{ category.icon }}</div>
+        <h3>{{ category.name }}</h3>
+        <div class="cat-arrow">→</div>
+      </a>
+      {% endfor %}
     </div>
   </div>
 </section>
+
 
 <!-- TRENDING -->
 <section class="section">
@@ -174,57 +171,32 @@
       <a href="{% url 'explore'%}" class="btn btn-ghost">View All →</a>
     </div>
     <div class="trend-list">
-      <article class="trend-item" onclick="location.href='{% url 'blog_detail'%}'">
-        <span class="trend-num">01</span>
+      {% for post in posts %}
+      <article class="trend-item" onclick="location.href='{% url 'blog_details' post.id %}'">
+        <span class="trend-num">0{{ forloop.counter }}</span>
         <div class="trend-body">
-          <div class="trend-meta"><span class="tag cat-tech">Technology</span><span class="post-date">Mar 5</span></div>
-          <h3>Why Every Developer Should Learn Design Thinking</h3>
-          <div class="author-pill" style="font-size:.78rem"><div class="avatar-placeholder avatar-xs" style="background:linear-gradient(135deg,#667eea,#764ba2)">V</div>Vikram Shah</div>
+          <div class="trend-meta">
+            <span class="tag">{{ post.post_category }}</span>
+            <span class="post-date">{{ post.created_at|date:"M d" }}</span>
+          </div>
+          <h3>{{ post.post_title }}</h3>
+          <div class="author-pill" style="font-size:.78rem">
+            <div class="avatar-placeholder avatar-xs">{{ post.author.fname|first|upper }}</div>
+            {{ post.author.fname }} {{ post.author.lname }}
+          </div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0">
-          <span class="trend-stat">♥ 5.2k</span>
-          <img class="trend-thumb" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=150&q=80" alt="">
+          <span class="trend-stat">♥ {{ post.likes.count }}</span>
+          {% if post.post_image %}
+            <img class="trend-thumb" src="{{ post.post_image.url }}" alt="">
+          {% endif %}
         </div>
       </article>
-      <article class="trend-item" onclick="location.href='{% url 'blog_detail'%}'">
-        <span class="trend-num">02</span>
-        <div class="trend-body">
-          <div class="trend-meta"><span class="tag cat-travel">Travel</span><span class="post-date">Mar 4</span></div>
-          <h3>The Last Wild Places: A Photographer's Journey Through Patagonia</h3>
-          <div class="author-pill" style="font-size:.78rem"><div class="avatar-placeholder avatar-xs" style="background:linear-gradient(135deg,#43e97b,#38f9d7)">S</div>Sofia Reyes</div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0">
-          <span class="trend-stat">♥ 3.8k</span>
-          <img class="trend-thumb" src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=150&q=80" alt="">
-        </div>
-      </article>
-      <article class="trend-item" onclick="location.href='{% url 'blog_detail'%}'">
-        <span class="trend-num">03</span>
-        <div class="trend-body">
-          <div class="trend-meta"><span class="tag cat-wellness">Wellness</span><span class="post-date">Mar 3</span></div>
-          <h3>I Tracked My Sleep for 90 Days — Here's What I Found</h3>
-          <div class="author-pill" style="font-size:.78rem"><div class="avatar-placeholder avatar-xs" style="background:linear-gradient(135deg,#fa709a,#fee140)">P</div>Priya Nair</div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0">
-          <span class="trend-stat">♥ 2.9k</span>
-          <img class="trend-thumb" src="https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=150&q=80" alt="">
-        </div>
-      </article>
-      <article class="trend-item" onclick="location.href='{% url 'blog_detail'%}'">
-        <span class="trend-num">04</span>
-        <div class="trend-body">
-          <div class="trend-meta"><span class="tag cat-design">Design</span><span class="post-date">Mar 2</span></div>
-          <h3>The Quiet Revolution in Typography That Nobody's Talking About</h3>
-          <div class="author-pill" style="font-size:.78rem"><div class="avatar-placeholder avatar-xs" style="background:linear-gradient(135deg,#f093fb,#f5576c)">A</div>Arjun Mehta</div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0">
-          <span class="trend-stat">♥ 1.7k</span>
-          <img class="trend-thumb" src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=150&q=80" alt="">
-        </div>
-      </article>
+      {% endfor %}
     </div>
   </div>
 </section>
+
 
 <!-- AUTHORS -->
 <section class="section" style="background:var(--paper-warm)">
@@ -259,7 +231,7 @@
 </section>
 
 <!-- CTA -->
- {% if not request.session.user_email %}
+ {% if not user.is_authenticated %}
 <section class="cta-section">
   <div class="hero-bg-wrap"><div class="blob blob-1"></div><div class="blob blob-2"></div><div class="grain"></div></div>
   <div class="container cta-inner">

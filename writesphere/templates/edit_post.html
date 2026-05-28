@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>New Post — WriteSphere</title>
+  <title>Edit Post — WriteSphere</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -28,11 +28,11 @@
   </div>
 </nav>
 
-<form method="POST" action="{% url 'create_post' %}" enctype="multipart/form-data" class="create-layout">
+<form method="POST" action="{% url 'edit_post' post.id %}" enctype="multipart/form-data" class="create-layout">
     {% csrf_token %}
   <!-- EDITOR -->
   <div class="create-main">
-    <input type="text" id="postTitle" class="create-title-input" placeholder="Your story title..." name="post_title">
+    <input type="text" id="postTitle" class="create-title-input" placeholder="Your story title..." name="post_title" value="{{ post.post_title }}">
     <span style="color:red; font-size:.8rem">{{ form.post_title.errors }}</span>
 
     <!-- TOOLBAR -->
@@ -64,20 +64,24 @@
       <h4>Publish Settings</h4>
       <div class="publish-row">
         <button type="button" class="btn-draft"> Cencle </button>
-        <button type="submit" class="btn-publish" id="publishBtn">Publish Story →</button>
+        <button type="submit" class="btn-publish" id="publishBtn">Update Story →</button>
       </div>
     </div>
 
     <!-- Cover Image -->
-    <div class="side-card">
-      <h4>Cover Image</h4>
-      <div class="upload-drop" id="uploadDrop">
-        <div class="ud-icon">📷</div>
-        <p>Click or drag to upload</p>
-        <small>PNG, JPG up to 5MB</small>
-      </div>
-      <input type="file" id="coverFileInput" accept="image/*" style="display:none" name="post_image">
-    </div>
+<div class="side-card">
+  <h4>Cover Image</h4>
+  {% if post.post_image %}
+    <img src="{{ post.post_image.url }}" style="width:100%;height:130px;object-fit:cover;border-radius:8px;margin-bottom:8px">
+    <p style="font-size:.72rem;color:var(--ink-muted)">Current image — upload new to replace</p>
+  {% endif %}
+  <div class="upload-drop" id="uploadDrop">
+    <div class="ud-icon">📷</div>
+    <p>Click or drag to upload</p>
+    <small>PNG, JPG up to 5MB</small>
+  </div>
+  <input type="file" id="coverFileInput" accept="image/*" style="display:none" name="post_image">
+</div>
 
     <!-- Category -->
 <div class="side-card">
@@ -85,8 +89,8 @@
   <select class="side-select" name="post_category">
     <option value="">Select category...</option>
     {% for category in categories %}
-      <option value="{{ category.id }}">{{ category.icon }} {{ category.name }}</option>
-    {% endfor %}
+  <option value="{{ category.id }}" {% if post.post_category == category %}selected{% endif %}>{{ category.icon }} {{ category.name }}</option>
+{% endfor %}
   </select>
   <span style="color:red; font-size:.8rem">{{ form.post_category.errors }}</span>
 </div>
@@ -95,7 +99,7 @@
     <div class="side-card">
       <h4>Tags</h4>
       <div class="tag-input-area" id="tagInputWrap">
-        <input type="text" id="tagField" class="tag-input-field" name="tags">
+        <input type="text" id="tagField" class="tag-input-field" name="tags" value="{{ post.tags }}">
       </div>
       <p style="font-size:.72rem;color:var(--ink-muted);margin-top:6px">Press Enter or comma to add a tag</p>
       <span style="color:red; font-size:.8rem">{{ form.tags.errors }}</span>
@@ -122,15 +126,17 @@ function insertLink() {
   const text = sel.toString() || 'link text';
   document.execCommand('insertHTML', false, `<a href="${url}" target="_blank" style="color:var(--accent)">${text}</a>`);
 }
+
 function insertCode() {
   const sel = window.getSelection().toString() || 'code here';
   document.execCommand('insertHTML', false, `<code style="font-family:monospace;background:rgba(13,11,26,.07);padding:2px 6px;border-radius:4px">${sel}</code>`);
 }
-document.querySelector('form').addEventListener('submit', function (e) {
-    const desc = document.getElementById("editorBody").innerHTML.trim();
-    const title = document.getElementById("postTitle").value.trim();
-    
-    document.getElementById("hiddenPostDesc").value = desc;
+
+document.getElementById("editorBody").innerHTML = "{{ post.post_desc|escapejs }}";
+
+
+document.querySelector('form').addEventListener('submit', function () {
+    document.getElementById("hiddenPostDesc").value = document.getElementById("editorBody").innerHTML.trim();
 });
 </script>
 </body>

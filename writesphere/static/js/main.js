@@ -403,25 +403,6 @@ function addTag(name) {
   });
 })();
 
-/* ============================================
-   DASHBOARD TABLE ACTIONS
-   ============================================ */
-document.addEventListener('click', e => {
-  // Edit button
-  if (e.target.matches('.tbl-btn:not(.del)')) {
-    window.location.href = 'create-post.html';
-  }
-  // Delete button
-  if (e.target.matches('.tbl-btn.del')) {
-    if (confirm('Are you sure you want to delete this post?')) {
-      const row = e.target.closest('.table-row');
-      row.style.opacity = '0';
-      row.style.transition = 'opacity .3s';
-      setTimeout(() => row.remove(), 320);
-      showToast('Post deleted.');
-    }
-  }
-});
 
 /* ============================================
    BLOG SHARE

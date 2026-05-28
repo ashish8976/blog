@@ -45,61 +45,40 @@
 <section class="section-sm">
   <div class="container">
     <div class="posts-grid">
-      <article class="post-card" onclick="location.href='blog_detail.html'">
-        <div class="post-img-wrap"><img class="post-img" src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80" alt=""><span class="post-cat-pin">Technology</span></div>
-        <div class="post-body">
-          <div class="post-meta-row"><div class="author-pill"><div class="avatar-placeholder avatar-sm" style="background:linear-gradient(135deg,#f093fb,#f5576c)">A</div>Arjun Mehta</div><span class="post-date">Mar 3</span></div>
-          <h3 class="post-title">Building the Next Generation of Human-Computer Interfaces</h3>
-          <p class="post-excerpt">As neural interfaces advance, we're approaching a moment where thought and machine become indistinguishable...</p>
-          <div class="post-footer"><div class="post-tags-row"><span class="tag cat-tech">AI</span><span class="tag">Future</span></div><div class="post-stats"><span>♥ 3.2k</span><span>8 min</span></div></div>
-        </div>
-      </article>
-      <article class="post-card" onclick="location.href='blog_detail.html'">
-        <div class="post-img-wrap"><img class="post-img" src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600&q=80" alt=""><span class="post-cat-pin">Travel</span></div>
-        <div class="post-body">
-          <div class="post-meta-row"><div class="author-pill"><div class="avatar-placeholder avatar-sm" style="background:linear-gradient(135deg,#43e97b,#38f9d7)">L</div>Lena Park</div><span class="post-date">Feb 28</span></div>
-          <h3 class="post-title">48 Hours in Kyoto: Temples, Tofu & Quiet Mornings</h3>
-          <p class="post-excerpt">Kyoto in late February is a city still holding its breath before spring — perfect for a wandering pilgrim...</p>
-          <div class="post-footer"><div class="post-tags-row"><span class="tag cat-travel">Japan</span></div><div class="post-stats"><span>♥ 1.8k</span><span>5 min</span></div></div>
-        </div>
-      </article>
-      <article class="post-card" onclick="location.href='blog_detail.html'">
-        <div class="post-img-wrap"><img class="post-img" src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&q=80" alt=""><span class="post-cat-pin">Wellness</span></div>
-        <div class="post-body">
-          <div class="post-meta-row"><div class="author-pill"><div class="avatar-placeholder avatar-sm" style="background:linear-gradient(135deg,#fa709a,#fee140)">P</div>Priya Nair</div><span class="post-date">Feb 25</span></div>
-          <h3 class="post-title">The Science of Rest: Why Doing Nothing Is Productive</h3>
-          <p class="post-excerpt">Modern productivity culture has convinced us that rest is weakness. The science says otherwise...</p>
-          <div class="post-footer"><div class="post-tags-row"><span class="tag cat-wellness">Health</span></div><div class="post-stats"><span>♥ 2.1k</span><span>6 min</span></div></div>
-        </div>
-      </article>
-      <article class="post-card" onclick="location.href='blog_detail.html'">
-        <div class="post-img-wrap"><img class="post-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80" alt=""><span class="post-cat-pin">Philosophy</span></div>
-        <div class="post-body">
-          <div class="post-meta-row"><div class="author-pill"><div class="avatar-placeholder avatar-sm" style="background:linear-gradient(135deg,#4facfe,#00f2fe)">J</div>James Okonkwo</div><span class="post-date">Feb 22</span></div>
-          <h3 class="post-title">Stoicism in Silicon Valley: Ancient Wisdom for Modern Chaos</h3>
-          <p class="post-excerpt">Marcus Aurelius never had a Slack notification, but his advice holds up surprisingly well...</p>
-          <div class="post-footer"><div class="post-tags-row"><span class="tag">Mindset</span></div><div class="post-stats"><span>♥ 4.5k</span><span>9 min</span></div></div>
-        </div>
-      </article>
-      <article class="post-card" onclick="location.href='blog_detail.html'">
-        <div class="post-img-wrap"><img class="post-img" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&q=80" alt=""><span class="post-cat-pin">Design</span></div>
-        <div class="post-body">
-          <div class="post-meta-row"><div class="author-pill"><div class="avatar-placeholder avatar-sm" style="background:linear-gradient(135deg,#667eea,#764ba2)">V</div>Vikram Shah</div><span class="post-date">Feb 19</span></div>
-          <h3 class="post-title">Why Every Developer Should Learn Design Thinking</h3>
-          <p class="post-excerpt">The most impactful engineers don't just write clean code — they empathize with users first...</p>
-          <div class="post-footer"><div class="post-tags-row"><span class="tag cat-design">Design</span></div><div class="post-stats"><span>♥ 5.2k</span><span>7 min</span></div></div>
-        </div>
-      </article>
-      <article class="post-card" onclick="location.href='blog_detail.html'">
-        <div class="post-img-wrap"><img class="post-img" src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=600&q=80" alt=""><span class="post-cat-pin">Travel</span></div>
-        <div class="post-body">
-          <div class="post-meta-row"><div class="author-pill"><div class="avatar-placeholder avatar-sm" style="background:linear-gradient(135deg,#f5576c,#c0392b)">S</div>Sofia Reyes</div><span class="post-date">Feb 15</span></div>
-          <h3 class="post-title">The Last Wild Places: A Photographer's Journey Through Patagonia</h3>
-          <p class="post-excerpt">At the bottom of the world, where the wind never stops and the glaciers still remember ice ages...</p>
-          <div class="post-footer"><div class="post-tags-row"><span class="tag cat-travel">Nature</span></div><div class="post-stats"><span>♥ 3.8k</span><span>10 min</span></div></div>
-        </div>
-      </article>
+  {% for post in posts %}
+  <article class="post-card" onclick="location.href='{% url 'blog_details' post.id %}'">
+    <div class="post-img-wrap">
+      {% if post.post_image %}
+        <img class="post-img" src="{{ post.post_image.url }}" alt="{{ post.post_title }}">
+      {% else %}
+        <img class="post-img" src="{% static 'images/myimage.png' %}" alt="default">
+      {% endif %}
+      <span class="post-cat-pin">{{ post.post_category }}</span>
     </div>
+    <div class="post-body">
+      <div class="post-meta-row">
+        <div class="author-pill">
+          {% if post.author.profile_photo %}
+            <img src="{{ post.author.profile_photo.url }}" class="avatar-sm">
+          {% else %}
+            <div class="avatar-placeholder avatar-sm">{{ post.author.fname|first|upper }}</div>
+          {% endif %}
+          {{ post.author.fname }} {{ post.author.lname }}
+        </div>
+        <span class="post-date">{{ post.created_at|date:"M d" }}</span>
+      </div>
+      <h3 class="post-title">{{ post.post_title }}</h3>
+      <div class="post-footer">
+        <div class="post-tags-row">
+          <span class="tag">{{ post.tags }}</span>
+        </div>
+      </div>
+    </div>
+  </article>
+  {% empty %}
+  <p style="color:var(--ink-muted)">No Post Here Published</p>
+  {% endfor %}
+</div>
     <div class="pagination">
       <button class="page-btn active">1</button>
       <button class="page-btn">2</button>

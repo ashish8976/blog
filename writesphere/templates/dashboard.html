@@ -60,7 +60,7 @@
     <div class="stat-cards">
       <div class="stat-card">
         <span class="sc-icon">📄</span>
-        <span class="sc-num"></span>
+        <span class="sc-num">{{ posts.count }}</span>
         <div class="sc-label" >Total Stories</div>
        
       </div>
@@ -90,41 +90,22 @@
         <div>Status</div>
         <div>Actions</div>
       </div>
-      <div class="table-row">
-        <div class="table-title"><a href="blog-detail.html" style="color:inherit">Building the Next Generation of Human-Computer Interfaces</a></div>
-        <div><span class="tag cat-tech">Technology</span></div>
-        <div class="table-muted">Mar 3, 2026</div>
-        <div><span class="badge badge-published">Published</span></div>
-        <div class="tbl-actions"><button class="tbl-btn" onclick="location.href='{% url 'create_post' %}'">Edit</button><button class="tbl-btn del">Delete</button></div>
-      </div>
-      <div class="table-row">
-        <div class="table-title"><a href="blog-detail.html" style="color:inherit">The Quiet Revolution in Typography That Nobody's Talking About</a></div>
-        <div><span class="tag cat-design">Design</span></div>
-        <div class="table-muted">Feb 18, 2026</div>
-        <div><span class="badge badge-published">Published</span></div>
-        <div class="tbl-actions"><button class="tbl-btn" onclick="location.href='{% url 'create_post' %}'">Edit</button><button class="tbl-btn del">Delete</button></div>
-      </div>
-      <div class="table-row">
-        <div class="table-title"><a href="blog-detail.html" style="color:inherit">Open Source Is Eating the World — And That's a Good Thing</a></div>
-        <div><span class="tag cat-tech">Technology</span></div>
-        <div class="table-muted">Feb 5, 2026</div>
-        <div><span class="badge badge-published">Published</span></div>
-        <div class="tbl-actions"><button class="tbl-btn" onclick="location.href='{% url 'create_post' %}'">Edit</button><button class="tbl-btn del">Delete</button></div>
-      </div>
-      <div class="table-row">
-        <div class="table-title" style="color:var(--ink-muted)">The Problem With Productivity Culture [DRAFT]</div>
-        <div><span class="tag">Philosophy</span></div>
-        <div class="table-muted">—</div>
-        <div><span class="badge badge-draft">Draft</span></div>
-        <div class="tbl-actions"><button class="tbl-btn" onclick="location.href='{% url 'create_post' %}'">Edit</button><button class="tbl-btn del">Delete</button></div>
-      </div>
-      <div class="table-row">
-        <div class="table-title"><a href="blog-detail.html" style="color:inherit">Slow Thinking in a Fast World: The Case for Deliberation</a></div>
-        <div><span class="tag">Philosophy</span></div>
-        <div class="table-muted">Jan 22, 2026</div>
-        <div><span class="badge badge-published">Published</span></div>
-        <div class="tbl-actions"><button class="tbl-btn" onclick="location.href='{% url 'create_post' %}'">Edit</button><button class="tbl-btn del">Delete</button></div>
-      </div>
+      {% for post in posts %}
+<div class="table-row">
+  <div class="table-title">{{ post.post_title }}</div>
+  <div><span class="tag">{{ post.post_category }}</span></div>
+  <div class="table-muted">{{ post.created_at|date:"M d, Y" }}</div>
+  <div><span class="badge badge-published">Published</span></div>
+  <div class="tbl-actions">
+    <button class="tbl-btn" onclick="location.href='{% url 'edit_post' post.id %}'">Edit</button>
+    <a href="{% url 'delete_post' post.id %}" class="tbl-btn del" onclick="return confirm('Are you sure? This post will be permanently deleted!')">Delete</a>
+  </div>
+</div>
+{% empty %}
+<div class="table-row">
+  <div style="color:var(--ink-muted); padding:20px">No Post Found ! Please Write a Post First ✍️</div>
+</div>
+{% endfor %}
     </div>
   </main>
 </div>

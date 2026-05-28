@@ -101,11 +101,11 @@
     <ul class="nav-links">
       <li><a href="{% url 'index' %}">Home</a></li>
       <li><a href="{% url 'explore' %}">Explore</a></li>
-      <li><a href="{% url 'blog_detail' %}">Stories</a></li>
       <li><a href="{% url 'author' %}">Authors</a></li>
+      <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
     </ul>
     <div class="nav-actions">
-      {% if request.session.user_email %}
+       {% if user.is_authenticated %} 
         {% if request.session.user_role == 'author' %}
           <a href="{% url 'dashboard' %}" class="btn btn-ghost">Dashboard</a>
           <a href="{% url 'create_post' %}" class="btn btn-create-post">✍️ Create Post</a>

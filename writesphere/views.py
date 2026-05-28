@@ -6,7 +6,7 @@ from django.contrib.auth import logout as auth_logout
 from django.core.mail import send_mail
 from django.conf import settings
 import random
-from . models import User, Post
+from . models import *
 import time
 from functools import wraps
 from django.contrib.auth.decorators import login_required
@@ -88,8 +88,7 @@ def logout(request):
     auth_logout(request)
     return redirect('login')
 
-def author(request):
-    return render(request,'author.html')
+
 
 def forgetpassword(request):
     if request.method == "POST":
@@ -170,35 +169,118 @@ def resetpassword(request):
 
  
 def index(request):
-    return render (request,'index.html')
+    posts = Post.objects.all().order_by('-created_at')[:6] 
+    hero_posts = Post.objects.all().order_by('-created_at')[:3]
+    categories = Category.objects.all()
+    return render(request, 'index.html', {
+        'posts': posts,
+        'categories': categories,
+        'hero_posts':hero_posts,
+    })
 
-def explore(request):
-    return render (request,'explore.html')
-
-def blog_details(request):
-    return render (request,'blog_details.html')
 
 def category(request):
-    return render(request,'category.html')
+    categories = Category.objects.all()
+    return render(request,'category.html',{
+        'categories':categories
+    })
+
+
+def explore(request):
+    categories = Category.objects.all()
+    posts = Post.objects.all()
+    return render(request,'explore.html',{
+        'posts':posts,
+        'categories':categories,
+    })
+
+def blog_details(request,pk):
+    post = Post.objects.get(id=pk)
+    comments = Comment.objects.filter(post=post)
+    likes = Like.objects.filter(post=post).count()
+    is_liked = False
+
+    if request.user.is_authenticated:
+        is_liked = Like.objects.filter(
+            post=post,
+            user = request.user,  
+         ).exists()
+    
+    if request.method == "POST":
+        comment_text = request.POST.get('comment')
+        if comment_text:
+            Comment.objects.create(
+                    post=post,
+                    user = request.user,
+                    comment = comment_text
+            )
+        return redirect('blog_details',pk=pk)
+    
+
+    return render(request,'blog_details.html',{
+        'post':post,
+        'comments':comments,
+        'likes':likes,
+        'is_liked':is_liked
+    })
+
+
+@login_required
+def like_post(request,pk):
+    post = Post.objects.get(id=pk)
+    like = Like.objects.filter(post=post, user=request.user)
+
+    if like.exists():
+        like.delete()
+    else:
+        Like.objects.create(post=post,user = request.user)
+    return redirect('blog_details', pk=pk)
+
+
+
 
 @login_required
 def dashboard(request):
-    return render (request, 'dashboard.html')
+    posts = Post.objects.filter(author=request.user)
+    return render (request, 'dashboard.html', {
+        'posts':posts
+    })
 
 @login_required
 def create_post(request):
+    form = PostForm()
+    categories = Category.objects.all()
     if request.method == "POST":
-        Post.objects.create(
-            post_title = request.POST.get('post_title'),
-            post_desc = request.POST.get('post_desc'),
-            post_category = request.POST.get('post_category'),
-            tags = request.POST.get('tags'),
-            post_image = request.FILES.get('post_image')
-        )
-        return redirect('dashboard')
-        
-    return render(request,'create_post.html')
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post =  form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return redirect('dashboard')
+    return render(request, 'create_post.html', {'form': form, 'categories': categories})
 
+@login_required
+def edit_post(request,pk):
+    post =  Post.objects.get(id=pk)
+    form = PostForm(instance=post)
+    categories = Category.objects.all()
+    if request.method == "POST":
+        form = PostForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+        
+    return render(request,'edit_post.html',{
+        'form':form,
+        'categories':categories,
+        'post':post
+    })
+
+@login_required
+def delete_post(request,pk):
+    post = Post.objects.get(id=pk)
+    post.delete()
+    return redirect('dashboard')
 
 @login_required
 def profile(request):
@@ -217,11 +299,14 @@ def profile(request):
         if request.POST.get('bio'):
             user.bio = request.POST.get('bio')
         if request.POST.get('profile_photo'):
-            user.profile_photo = request.POST.get('profile_photo')
+            user.profile_photo = request.FILES.get('profile_photo')
 
+        user.save()
         return redirect('profile')
      
-     return render(request, 'profile.html')
+     return render(request, 'profile.html',{
+         'user':user
+     })
 
 
 def edit_profile(request):
@@ -230,3 +315,7 @@ def edit_profile(request):
 
 def author_story(request):
     return render(request, 'author_story.html')
+
+
+def author(request):
+    return render(request,'author.html')
