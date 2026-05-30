@@ -94,8 +94,21 @@ def update_password(request):
         oldpassword = request.POST('oldpass')
         newpassword = request.POST('newpass')
         conpassword = request.POST('cpass')
-        
-
+        if oldpassword == user.password:
+            if newpassword == conpassword:
+                user.password = newpassword
+                user.save()
+                return redirect('login')
+            else:
+                msg = "Password and confirm Password is not match"
+                return render(request,'updatepassword.html',{
+                    'msg',msg
+                })
+        else:
+            msg = "Your Old Password is not match"
+            return render(request,'updatepassword.html',{
+                'msg':msg
+            })
     return render(request,'updatepassword.html')
 
 
@@ -201,9 +214,27 @@ def category(request):
 def explore(request):
     categories = Category.objects.all()
     posts = Post.objects.all()
+    query = request.GET.get('q' , '')
+    category_filter = request.GET.get('category','')
+
+    if query:
+        posts = posts.filter(
+            Q(post_title__icontains=query) |
+            Q(author__fname__icontains=query) |     
+            Q(author__lname__icontains=query) |      
+            Q(author__username__icontains=query) |   
+            Q(tags__icontains=query) |
+            Q(post_category__name__icontains=query)  
+        )
+    if category_filter:
+        posts = posts.filter(post_category = category_filter)
+
+
     return render(request,'explore.html',{
         'posts':posts,
         'categories':categories,
+        'query': query,
+        'category_filter':category_filter
     })
 
 def blog_details(request,pk):

@@ -9,38 +9,15 @@
     <h1>Explore <em>Stories</em></h1>
     <p style="color:var(--ink-muted);margin-top:6px">Find stories that inspire, challenge, and move you.</p>
     <div class="search-wrap">
-      <input type="text" placeholder="Search stories, authors, topics...">
-      <button>Search</button>
-    </div>
+  <form method="GET" action="{% url 'explore' %}" style="display:flex;width:100%;gap:10px">
+    <input type="text" name="q" placeholder="Search stories, authors, topics..." value="{{ query }}">
+    <button type="submit">Search</button>
+  </form>
+</div>
   </div>
 </div>
 
-<div class="filter-bar">
-  <div class="container">
-    <div class="filter-row">
-      <button class="filter-chip active">All</button>
-      <button class="filter-chip">Technology</button>
-      <button class="filter-chip">Travel</button>
-      <button class="filter-chip">Wellness</button>
-      <button class="filter-chip">Fiction</button>
-      <button class="filter-chip">Design</button>
-      <button class="filter-chip">Science</button>
-      <button class="filter-chip">Philosophy</button>
-      <select class="filter-select" style="margin-left:auto">
-        <option>Sort: Latest</option>
-        <option>Sort: Most Liked</option>
-        <option>Sort: Most Commented</option>
-        <option>Sort: Trending</option>
-      </select>
-      <select class="filter-select">
-        <option>All Time</option>
-        <option>This Week</option>
-        <option>This Month</option>
-        <option>This Year</option>
-      </select>
-    </div>
-  </div>
-</div>
+
 
 <section class="section-sm">
   <div class="container">
