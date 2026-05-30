@@ -1,4 +1,6 @@
+{% extends "base.html"%}
 {% load static %}
+{% block content %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,20 +12,6 @@
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-<nav class="navbar" id="navbar">
-  <div class="nav-inner">
-    <a href="{% url 'index' %}" class="logo">Write<span>Sphere</span></a>
-    <ul class="nav-links">
-      <li><a href="{% url 'index' %}">Home</a></li>
-      <li><a href="{% url 'explore' %}">Explore</a></li>
-      <li><a href="{% url 'author' %}">Author</a></li>
-      <li><a href="{% url 'dashboard'%}" class="active">Dashboard</a></li>
-    </ul>
-    
-    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
-  </div>
-  
-</nav>
 
 <div class="dash-layout">
   <!-- SIDEBAR -->
@@ -50,7 +38,6 @@
   <main class="dash-main">
     <div class="dash-header">
       <div>
-        <p style="font-size:.85rem;color:var(--ink-muted)">Good morning ✦</p>
         <h2>Welcome back, <em>{{user.fname}} {{user.lname}}</em></h2>
       </div>
       <a href="{% url 'create_post' %}" class="btn btn-primary">+ Write New Post</a>
@@ -113,3 +100,6 @@
 <script src="{% static 'js/main.js' %}"></script>
 </body>
 </html>
+
+
+{% endblock %}

@@ -88,6 +88,18 @@ def logout(request):
     auth_logout(request)
     return redirect('login')
 
+def update_password(request):
+    user = request.user
+    if request.method == "POST":
+        oldpassword = request.POST('oldpass')
+        newpassword = request.POST('newpass')
+        conpassword = request.POST('cpass')
+        
+
+    return render(request,'updatepassword.html')
+
+
+
 
 
 def forgetpassword(request):
@@ -282,35 +294,32 @@ def delete_post(request,pk):
     post.delete()
     return redirect('dashboard')
 
+
 @login_required
 def profile(request):
-     user = request.user
-     if request.method == "POST":
-        if request.POST.get('fname'):
-             user.fname = request.POST.get('fname')
-        if request.POST.get('lname'):
-            user.lname = request.POST.get('lname')
-        if request.POST.get('username'):
-            user.username = request.POST.get('username')
-        if request.POST.get('email'):
-            user.email = request.POST.get('email')
-        if request.POST.get('role'):
-            user.role = request.POST.get('role')
-        if request.POST.get('bio'):
-            user.bio = request.POST.get('bio')
-        if request.POST.get('profile_photo'):
-            user.profile_photo = request.FILES.get('profile_photo')
+    user = request.user
+    if request.method == "POST":
+         if request.FILES.get('profile_photo'):
+             user.profile_photo = request.FILES.get('profile_photo')
+             user.save()
+             request.session['user_image'] = user.profile_photo.url
+             return redirect('profile')
 
-        user.save()
-        return redirect('profile')
-     
-     return render(request, 'profile.html',{
-         'user':user
-     })
 
+         user.fname = request.POST.get('fname', user.fname)
+         user.lname = request.POST.get('lname', user.lname)
+         user.email = request.POST.get('email', user.email)
+         user.username = request.POST.get('username', user.username)
+         user.bio = request.POST.get('bio',user.bio)
+         user.save()
+         return redirect('profile')
+         
+    return render(request,'profile.html',{
+        'user':user
+    })
 
 def edit_profile(request):
-    return render(request, 'edit_profile.html')
+    return render(request,'edit_profile.html')
 
 
 def author_story(request):

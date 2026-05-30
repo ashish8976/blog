@@ -51,7 +51,7 @@ class Post(models.Model):
     post_title = models.CharField(max_length=200)
     post_desc = models.TextField(null=True, blank=True)
     post_image = models.ImageField(upload_to='post_images/', blank=True, null=True)
-    post_category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True, blank=True)  # ✅ ForeignKey
+    post_category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True, blank=True)  
     tags = models.CharField(max_length=300, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -65,7 +65,7 @@ class Like(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('post', 'user')  # Ek user ek post ko sirf ek baar like kare
+        unique_together = ('post', 'user')  
 
     def __str__(self):
         return f"{self.user} liked {self.post}"

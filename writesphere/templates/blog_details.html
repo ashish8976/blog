@@ -2,6 +2,7 @@
 {% load static %}
 {% block content %}
 
+
 <div class="blog-hero">
   <div class="blog-hero-inner">
     <div class="breadcrumb">
@@ -99,7 +100,7 @@
           </div>
         </div>
         {% empty %}
-        <p style="color:var(--ink-muted)">Koi comment nahi hai — pehla comment karo! 😊</p>
+        <p style="color:var(--ink-muted)">No Commnet Hear ! Enter Comment First 😊</p>
         {% endfor %}
       </div>
     </div>
@@ -122,17 +123,6 @@
     No bio added yet.
   {% endif %}
 </p>
-    </div>
-
-    <div class="sidebar-widget">
-      <h4>Popular Tags</h4>
-      <div style="display:flex;flex-wrap:wrap;gap:8px">
-        <span class="tag cat-tech">AI</span>
-        <span class="tag cat-design">Design</span>
-        <span class="tag cat-travel">Travel</span>
-        <span class="tag cat-wellness">Wellness</span>
-        <span class="tag">Philosophy</span>
-      </div>
     </div>
   </aside>
 </div>

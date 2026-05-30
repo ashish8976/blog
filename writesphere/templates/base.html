@@ -64,6 +64,7 @@
           <li><a href="{% url 'index' %}">Home</a></li>
           <li><a href="{% url 'explore' %}">Explore</a></li>
           <li><a href="{% url 'author' %}">Authors</a></li>
+          <li><a href="{% url 'category' %}">Topics</a></li>
           <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
         {% elif request.session.user_role == 'reader' %}
           <li><a href="{% url 'index' %}">Home</a></li>
@@ -88,8 +89,8 @@
         <!-- Profile Dropdown -->
         <div class="profile-dropdown-wrapper">
           <button class="nav-avatar-btn" id="profileDropdownBtn">
-          {% if request.session.user_image %}
-             <img src="{{ request.session.user_image }}" alt="Profile" class="nav-avatar">
+          {% if request.user.profile_photo %}
+             <img src="{{ request.user.profile_photo.url }}" alt="Profile" class="nav-avatar">
           {% else %}
               <img src="{% static 'images/myimage.png' %}" alt="Profile" class="nav-avatar">
           {% endif %}
@@ -98,6 +99,7 @@
           <div class="profile-dropdown-menu" id="profileDropdownMenu">
             <a href="{% url 'dashboard' %}">Dashboard</a>
             <a href="{% url 'profile' %}">Account</a>
+            <a href="{% url 'update_password' %}">Update Password</a>
             <a href="{% url 'logout' %}">Logout</a>
           </div>
         </div>
