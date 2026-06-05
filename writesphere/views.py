@@ -155,6 +155,10 @@ def otp(request):
             session_otp = request.session.get('otp')
             otp_time = request.session.get('otp_time')
 
+            if time.time() - otp_time > 300:  
+                msg = "OTP expired. Try again."
+                return render(request, 'otp.html', {'msg': msg})
+
             if not session_otp or not otp_time:
                 msg = "Session expired. Try again."
                 return render(request, 'otp.html', {'msg': msg})
@@ -368,6 +372,8 @@ def create_post(request):
 @login_required
 def edit_post(request,pk):
     post =  Post.objects.get(id=pk)
+    if post.author != request.user:  
+        return redirect('dashboard')
     form = PostForm(instance=post)
     categories = Category.objects.all()
     if request.method == "POST":
@@ -386,6 +392,8 @@ def edit_post(request,pk):
 @login_required
 def delete_post(request,pk):
     post = Post.objects.get(id=pk)
+    if post.author != request.user:  
+        return redirect('dashboard')
     post.delete()
     return redirect('dashboard')
 
@@ -455,7 +463,7 @@ def author_detail(request, pk):
 
 @login_required
 def author(request):
-    authors = User.objects.filter(role='author')
+    authors = User.objects.filter(role='Author')
     
     following_ids = []
     if request.user.is_authenticated:

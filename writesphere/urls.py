@@ -21,7 +21,7 @@ from writesphere import views
 
 
 urlpatterns = [
-    path('index/', views.index, name="index"),
+    path('', views.index, name="index"),
     path('explore/',views.explore,name="explore"),
     path('blog_details/<int:pk>/', views.blog_details, name='blog_details'),
     path('dashboard/',views.dashboard,name="dashboard"),
