@@ -1,6 +1,5 @@
 {% load static %}
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,14 +8,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar" id="navbar">
   <div class="nav-inner">
     <a href="{% url 'index'%}" class="logo">Write<span>Sphere</span></a>
-    <ul class="nav-links">
-      
-    </ul>
+    <ul class="nav-links"></ul>
     <div class="nav-actions">
       <span id="saveStatus" style="font-size:.8rem;color:var(--ink-muted)">All changes saved</span>
       <a href="{% url 'index'%}" class="btn btn-ghost btn-sm">← Back</a>
@@ -29,46 +27,24 @@
 </nav>
 
 <form method="POST" action="{% url 'create_post' %}" enctype="multipart/form-data" class="create-layout">
-    {% csrf_token %}
-  <!-- EDITOR -->
+  {% csrf_token %}
   <div class="create-main">
     <input type="text" id="postTitle" class="create-title-input" placeholder="Your story title..." name="post_title">
     <span style="color:red; font-size:.8rem">{{ form.post_title.errors }}</span>
 
-    <!-- TOOLBAR -->
-    <div class="editor-toolbar">
-      <button class="tb-btn" data-cmd="bold" title="Bold"><strong>B</strong></button>
-      <button class="tb-btn" data-cmd="italic" title="Italic"><em>I</em></button>
-      <button class="tb-btn" data-cmd="underline" title="Underline"><u>U</u></button>
-      <div class="tb-sep"></div>
-      <button class="tb-btn" data-cmd="formatBlock" data-val="h2" title="Heading 2">H2</button>
-      <button class="tb-btn" data-cmd="formatBlock" data-val="h3" title="Heading 3">H3</button>
-      <div class="tb-sep"></div>
-      <button class="tb-btn" data-cmd="formatBlock" data-val="blockquote" title="Quote">"</button>
-      <button class="tb-btn" data-cmd="insertUnorderedList" title="Bullet List">• List</button>
-      <button class="tb-btn" data-cmd="insertOrderedList" title="Numbered List">1. List</button>
-      <div class="tb-sep"></div>
-      <button class="tb-btn" onclick="insertLink()" title="Link">🔗 Link</button>
-      <button class="tb-btn" onclick="insertCode()" title="Code">&lt;/&gt;</button>
-    </div>
-
-    <div id="editorBody" class="editor-body" contenteditable="true" spellcheck="true"></div>
-    <input type="hidden" name="post_desc" id="hiddenPostDesc">
+    {{ form.post_desc }}
     <span style="color:red; font-size:.8rem">{{ form.post_desc.errors }}</span>
   </div>
 
-  <!-- SIDEBAR -->
   <div class="create-sidebar">
-    <!-- Publish -->
     <div class="side-card">
       <h4>Publish Settings</h4>
       <div class="publish-row">
-        <button type="button" class="btn-draft"> Cencle </button>
+        <button type="button" class="btn-draft">Cancel</button>
         <button type="submit" class="btn-publish" id="publishBtn">Publish Story →</button>
       </div>
     </div>
 
-    <!-- Cover Image -->
     <div class="side-card">
       <h4>Cover Image</h4>
       <div class="upload-drop" id="uploadDrop">
@@ -79,19 +55,17 @@
       <input type="file" id="coverFileInput" accept="image/*" style="display:none" name="post_image">
     </div>
 
-    <!-- Category -->
-<div class="side-card">
-  <h4>Category</h4>
-  <select class="side-select" name="post_category">
-    <option value="">Select category...</option>
-    {% for category in categories %}
-      <option value="{{ category.id }}">{{ category.icon }} {{ category.name }}</option>
-    {% endfor %}
-  </select>
-  <span style="color:red; font-size:.8rem">{{ form.post_category.errors }}</span>
-</div>
+    <div class="side-card">
+      <h4>Category</h4>
+      <select class="side-select" name="post_category">
+        <option value="">Select category...</option>
+        {% for category in categories %}
+          <option value="{{ category.id }}">{{ category.icon }} {{ category.name }}</option>
+        {% endfor %}
+      </select>
+      <span style="color:red; font-size:.8rem">{{ form.post_category.errors }}</span>
+    </div>
 
-    <!-- Tags -->
     <div class="side-card">
       <h4>Tags</h4>
       <div class="tag-input-area" id="tagInputWrap">
@@ -101,7 +75,6 @@
       <span style="color:red; font-size:.8rem">{{ form.tags.errors }}</span>
     </div>
 
-    <!-- SEO Preview -->
     <div class="side-card">
       <h4>SEO Preview</h4>
       <div class="seo-preview">
@@ -113,25 +86,23 @@
   </div>
 </form>
 
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
 <script src="{% static 'js/main.js' %}"></script>
 <script>
-function insertLink() {
-  const url = prompt('Enter URL:');
-  if (!url) return;
-  const sel = window.getSelection();
-  const text = sel.toString() || 'link text';
-  document.execCommand('insertHTML', false, `<a href="${url}" target="_blank" style="color:var(--accent)">${text}</a>`);
-}
-function insertCode() {
-  const sel = window.getSelection().toString() || 'code here';
-  document.execCommand('insertHTML', false, `<code style="font-family:monospace;background:rgba(13,11,26,.07);padding:2px 6px;border-radius:4px">${sel}</code>`);
-}
-document.querySelector('form').addEventListener('submit', function (e) {
-    const desc = document.getElementById("editorBody").innerHTML.trim();
-    const title = document.getElementById("postTitle").value.trim();
-    
-    document.getElementById("hiddenPostDesc").value = desc;
-});
+  $(document).ready(function() {
+    $('#id_post_desc').summernote({
+      height: 400,
+      placeholder: 'Write your story here...',
+      toolbar: [
+        ['style', ['bold', 'italic', 'underline', 'clear']],
+        ['font', ['strikethrough']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['insert', ['link', 'picture', 'hr']],
+        ['view', ['fullscreen', 'codeview']],
+      ],
+    });
+  });
 </script>
 </body>
 </html>

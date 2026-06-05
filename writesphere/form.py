@@ -1,5 +1,6 @@
 from django import forms
 from .models import *
+from django_summernote.widgets import SummernoteWidget
 
 class RegistrationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
@@ -35,6 +36,9 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['post_title','post_desc','post_category','tags','post_image']
+        widgets = {
+            'post_desc': SummernoteWidget(), 
+        }
 
     def clean_post_title(self):
         post_title = self.cleaned_data.get('post_title')

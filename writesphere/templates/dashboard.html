@@ -286,7 +286,7 @@
     <p class="dash-section-label">Main</p>
     <div class="dash-nav-link active" onclick="switchPanel('dashboard', this)"><span class="nav-icon">📊</span>Dashboard</div>
     <div class="dash-nav-link" onclick="switchPanel('stories', this)"><span class="nav-icon">📄</span>My Stories</div>
-    <div class="dash-nav-link" onclick="switchPanel('newpost', this)"><span class="nav-icon">✍️</span>New Post</div>
+    <a href="{% url 'create_post' %}" class="dash-nav-link"><span class="nav-icon">✍️</span>New Post</a>
 
     <p class="dash-section-label">Insights</p>
     <div class="dash-nav-link" onclick="switchPanel('analytics', this)"><span class="nav-icon">📈</span>Analytics</div>
