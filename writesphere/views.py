@@ -18,6 +18,7 @@ import json
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from dateutil.relativedelta import relativedelta
+from django.core.paginator import Paginator
 
 
 
@@ -239,6 +240,9 @@ def explore(request):
     if category_filter:
         posts = posts.filter(post_category = category_filter)
 
+    paginator = Paginator(posts, 10)  
+    page_number = request.GET.get('page')
+    posts = paginator.get_page(page_number)
 
     return render(request,'explore.html',{
         'posts':posts,

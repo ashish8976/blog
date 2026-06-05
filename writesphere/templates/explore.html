@@ -56,13 +56,21 @@
   <p style="color:var(--ink-muted)">No Post Here Published</p>
   {% endfor %}
 </div>
+
     <div class="pagination">
-      <button class="page-btn active">1</button>
-      <button class="page-btn">2</button>
-      <button class="page-btn">3</button>
-      <button class="page-btn">4</button>
-      <button class="page-btn">→</button>
-    </div>
+  {% if posts.has_previous %}
+    <a class="page-btn" href="?page={{ posts.previous_page_number }}&q={{ query }}&category={{ category_filter }}">←</a>
+  {% endif %}
+
+  {% for num in posts.paginator.page_range %}
+    <a class="page-btn {% if posts.number == num %}active{% endif %}" 
+       href="?page={{ num }}&q={{ query }}&category={{ category_filter }}">{{ num }}</a>
+  {% endfor %}
+
+  {% if posts.has_next %}
+    <a class="page-btn" href="?page={{ posts.next_page_number }}&q={{ query }}&category={{ category_filter }}">→</a>
+  {% endif %}
+</div>
   </div>
 </section>
 
