@@ -11,6 +11,13 @@ import time
 from functools import wraps
 from django.contrib.auth.decorators import login_required
 from .form import * 
+from django.db.models import Count
+from django.utils import timezone
+from datetime import timedelta
+import json
+from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
+from dateutil.relativedelta import relativedelta
 
 
 
@@ -88,31 +95,30 @@ def logout(request):
     auth_logout(request)
     return redirect('login')
 
+
+@login_required
 def update_password(request):
-    user = request.user
-    if request.method == "POST":
-        oldpassword = request.POST('oldpass')
-        newpassword = request.POST('newpass')
-        conpassword = request.POST('cpass')
-        if oldpassword == user.password:
-            if newpassword == conpassword:
-                user.password = newpassword
-                user.save()
-                return redirect('login')
-            else:
-                msg = "Password and confirm Password is not match"
-                return render(request,'updatepassword.html',{
-                    'msg',msg
-                })
+    pw_error = None
+    pw_success = None
+
+    if request.method == 'POST':
+        current = request.POST.get('current_password')
+        new = request.POST.get('new_password')
+        confirm = request.POST.get('confirm_password')
+
+        if not request.user.check_password(current):
+            pw_error = {'field': 'current', 'msg': 'Current password is incorrect.'}
+        elif new != confirm:
+            pw_error = {'field': 'confirm', 'msg': 'Passwords do not match.'}
+        elif len(new) < 6:
+            pw_error = {'field': 'new', 'msg': 'Password must be at least 6 characters.'}
         else:
-            msg = "Your Old Password is not match"
-            return render(request,'updatepassword.html',{
-                'msg':msg
-            })
-    return render(request,'updatepassword.html')
+            request.user.set_password(new)
+            request.user.save()
+            update_session_auth_hash(request, request.user)
+            pw_success = True
 
-
-
+    return redirect('dashboard')
 
 
 def forgetpassword(request):
@@ -145,8 +151,6 @@ def forgetpassword(request):
 
 def otp(request):
     if request.method == "POST":
-          #   user = User.objects.get(email = request.session['newemail'])
-          
             entered_otp = request.POST.get('uotp')
             session_otp = request.session.get('otp')
             otp_time = request.session.get('otp_time')
@@ -159,7 +163,6 @@ def otp(request):
                 del request.session['otp']
                 del request.session['otp_time']
                 return redirect('resetpassword') 
-            
             else:
                  msg = "OTP is invalid"
                  return render(request, 'otp.html', {'msg': msg})
@@ -206,9 +209,12 @@ def index(request):
 
 def category(request):
     categories = Category.objects.all()
-    return render(request,'category.html',{
-        'categories':categories
-    })
+    return render(request, 'category.html', {'categories': categories})
+
+def category_posts(request, cat_id):
+    cat = Category.objects.get(id=cat_id)
+    posts = Post.objects.filter(post_category=cat)
+    return render(request, 'category_posts.html', {'cat': cat, 'posts': posts})
 
 
 def explore(request):
@@ -280,13 +286,69 @@ def like_post(request,pk):
     return redirect('blog_details', pk=pk)
 
 
-
-
 @login_required
 def dashboard(request):
+    pw_error = None
+    pw_success = False
+
+    if request.method == 'POST':
+        current = request.POST.get('current_password')
+        new = request.POST.get('new_password')
+        confirm = request.POST.get('confirm_password')
+
+        if not request.user.check_password(current):
+            pw_error = {'field': 'current', 'msg': 'Current password is incorrect.'}
+        elif new != confirm:
+            pw_error = {'field': 'confirm', 'msg': 'Passwords do not match.'}
+        elif len(new) < 6:
+            pw_error = {'field': 'new', 'msg': 'Password must be at least 6 characters.'}
+        else:
+            request.user.set_password(new)
+            request.user.save()
+            update_session_auth_hash(request, request.user)
+            pw_success = True
+
     posts = Post.objects.filter(author=request.user)
-    return render (request, 'dashboard.html', {
-        'posts':posts
+    total_likes = sum(post.likes.count() for post in posts)
+    total_comments = sum(post.comments.count() for post in posts)
+
+    monthly_posts = []
+    monthly_labels = []
+    for i in range(5, -1, -1):
+        date = timezone.now() - relativedelta(months=i)
+        counts = posts.filter(created_at__year=date.year, created_at__month=date.month).count()
+        monthly_posts.append(counts)
+        monthly_labels.append(date.strftime('%b %Y'))
+
+    weekly_posts = []
+    weekly_labels = []
+    for i in range(6, -1, -1):
+        date = timezone.now() - timedelta(days=i)
+        counts = posts.filter(created_at__date=date.date()).count()
+        weekly_posts.append(counts)
+        weekly_labels.append(date.strftime('%a'))
+
+    top_posts = []
+    top_likes = []
+    top_comments = []
+    for post in posts.order_by('-created_at')[:5]:
+        top_posts.append(post.post_title[:20] + '...' if len(post.post_title) > 20 else post.post_title)
+        top_likes.append(post.likes.count())
+        top_comments.append(post.comments.count())
+
+    return render(request, 'dashboard.html', {
+        'posts': posts,
+        'total_likes': total_likes,
+        'total_comments': total_comments,
+        'monthly_labels': json.dumps(monthly_labels),
+        'monthly_posts': json.dumps(monthly_posts),
+        'weekly_labels': json.dumps(weekly_labels),
+        'weekly_posts': json.dumps(weekly_posts),
+        'top_posts': json.dumps(top_posts),
+        'top_likes': json.dumps(top_likes),
+        'top_comments': json.dumps(top_comments),
+        'pw_error': pw_error,
+        'pw_success': pw_success,
     })
 
 @login_required
@@ -301,6 +363,7 @@ def create_post(request):
             post.save()
             return redirect('dashboard')
     return render(request, 'create_post.html', {'form': form, 'categories': categories})
+
 
 @login_required
 def edit_post(request,pk):
@@ -318,6 +381,7 @@ def edit_post(request,pk):
         'categories':categories,
         'post':post
     })
+
 
 @login_required
 def delete_post(request,pk):
@@ -349,13 +413,62 @@ def profile(request):
         'user':user
     })
 
-def edit_profile(request):
-    return render(request,'edit_profile.html')
+
+@login_required
+def follow_user(request, pk):
+    user_to_follow = User.objects.get(id=pk)
+    follow = Follow.objects.filter(follower=request.user, following=user_to_follow)
+    
+    if follow.exists():
+        follow.delete()  
+    else:
+        Follow.objects.create(follower=request.user, following=user_to_follow)  # Follow karo
+    
+    return redirect(request.META.get('HTTP_REFERER', 'index'))
 
 
 def author_story(request):
     return render(request, 'author_story.html')
 
 
+@login_required
+def author_detail(request, pk):
+    author = User.objects.get(id=pk)
+    posts = Post.objects.filter(author=author)
+    is_following = False
+    followers_count = Follow.objects.filter(following=author).count()
+    following_count = Follow.objects.filter(follower=author).count()
+
+    if request.user.is_authenticated:
+        is_following = Follow.objects.filter(
+            follower=request.user,
+            following=author
+        ).exists()
+
+    return render(request, 'author_detail.html', {
+        'author': author,
+        'posts': posts,
+        'is_following': is_following,
+        'followers_count': followers_count,
+        'following_count': following_count,
+    })
+
+@login_required
 def author(request):
-    return render(request,'author.html')
+    authors = User.objects.filter(role='author')
+    
+    following_ids = []
+    if request.user.is_authenticated:
+        following_ids = Follow.objects.filter(
+            follower=request.user
+        ).values_list('following_id', flat=True)
+
+    total_posts = Post.objects.filter(author__in=authors).count() 
+    
+    return render(request, 'author.html', {
+        'authors': authors,
+        'following_ids': following_ids,
+        'total_posts' : total_posts,
+    })
+
+

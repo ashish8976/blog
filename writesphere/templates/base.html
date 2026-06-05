@@ -99,7 +99,6 @@
           <div class="profile-dropdown-menu" id="profileDropdownMenu">
             <a href="{% url 'dashboard' %}">Dashboard</a>
             <a href="{% url 'profile' %}">Account</a>
-            <a href="{% url 'update_password' %}">Update Password</a>
             <a href="{% url 'logout' %}">Logout</a>
           </div>
         </div>
@@ -147,6 +146,7 @@
 {% endblock %}
 
 <!-- FOOTER -->
+ {% if request.resolver_match.url_name == 'index' %}
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
@@ -184,6 +184,7 @@
     </div>
   </div>
 </footer>
+{% endif %}
 
 </body>
 </html>

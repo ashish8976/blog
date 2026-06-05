@@ -38,8 +38,9 @@ urlpatterns = [
     path('delete_post/<int:pk>/', views.delete_post, name='delete_post'),
     path('author_story/',views.author_story,name='author_story'),
     path('profile/', views.profile, name="profile"),
-    path('edit_profile/', views.edit_profile, name="edit_profile"),
-    path('category/',views.category,name='category'),
+    path('category/', views.category, name='category'),
+    path('category/<int:cat_id>/', views.category_posts, name='category_posts'),
     path('like_post/<int:pk>/', views.like_post, name='like_post'),
-
+    path('follow/<int:pk>/', views.follow_user, name='follow_user'),
+    path('author_detail/<int:pk>/', views.author_detail, name='author_detail'),
 ]

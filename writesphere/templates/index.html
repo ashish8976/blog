@@ -15,8 +15,6 @@
     <h1 class="hero-title">Where Every<br><em>Story</em> Finds<br>Its Reader</h1>
     <p class="hero-sub">Join thousands of writers sharing ideas, stories, and perspectives. Publish your voice — the world is listening.</p>
     <div class="hero-cta">
-      <a href="{% url 'register'%}" class="btn btn-primary btn-lg">Begin Your Journey</a>
-      <a href="{% url 'explore'%}" class="btn btn-outline btn-lg">Explore Stories →</a>
     </div>
     <div class="hero-stats">
       <div><span class="stat-num">12K+</span><span class="stat-label">Authors</span></div>
@@ -152,7 +150,7 @@
     </div>
     <div class="categories-grid">
       {% for category in categories|slice:":5" %}
-      <a href="{% url 'category' %}" class="cat-card">
+      <a href="{% url 'category_posts' category.id %}" class="cat-card">
         <div class="cat-icon">{{ category.icon }}</div>
         <h3>{{ category.name }}</h3>
         <div class="cat-arrow">→</div>

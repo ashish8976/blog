@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<style>
+  .author-profile-wrap {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+
+  /* Cover Banner */
+  .author-cover-banner {
+    height: 200px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    position: relative;
+    margin-bottom: 70px;
+  }
+
+  /* Avatar */
+  .author-avatar-wrap {
+    position: absolute;
+    bottom: -55px;
+    left: 40px;
+  }
+  .author-avatar-lg {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 4px solid white;
+    box-shadow: 0 8px 30px rgba(13,11,26,.2);
+    object-fit: cover;
+  }
+  .author-avatar-placeholder {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 4px solid white;
+    box-shadow: 0 8px 30px rgba(13,11,26,.2);
+    background: linear-gradient(135deg, #f093fb, #f5576c);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: white;
+  }
+
+  /* Profile Info */
+  .author-info-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .author-info-left h2 {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .author-info-left p {
+    color: var(--ink-muted);
+    font-size: .88rem;
+  }
+
+  /* Follow Button */
+  .follow-action-btn {
+    padding: 10px 28px;
+    border-radius: 100px;
+    font-weight: 700;
+    font-size: .88rem;
+    cursor: pointer;
+    transition: all .2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .follow-action-btn.follow {
+    background: var(--ink);
+    color: white;
+    border: 2px solid var(--ink);
+  }
+  .follow-action-btn.follow:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(201,75,42,.35);
+  }
+  .follow-action-btn.following {
+    background: transparent;
+    color: var(--ink);
+    border: 2px solid rgba(13,11,26,.2);
+  }
+  .follow-action-btn.following:hover {
+    background: #fee2e2;
+    color: #dc2626;
+    border-color: #dc2626;
+  }
+
+  /* Stats Row */
+  .author-stats-row {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .author-stat-item {
+    text-align: center;
+  }
+  .author-stat-item strong {
+    display: block;
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: var(--ink);
+  }
+  .author-stat-item span {
+    font-size: .75rem;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+  }
+
+  /* Bio */
+  .author-bio {
+    font-size: .9rem;
+    color: var(--ink-muted);
+    line-height: 1.6;
+    margin-bottom: 32px;
+    max-width: 600px;
+  }
+
+  /* Divider */
+  .author-divider {
+    height: 1px;
+    background: rgba(13,11,26,.08);
+    margin-bottom: 32px;
+  }
+
+  /* Posts Grid */
+  .author-posts-heading {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--ink);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .author-posts-heading span {
+    background: rgba(13,11,26,.07);
+    padding: 2px 10px;
+    border-radius: 100px;
+    font-size: .78rem;
+    font-weight: 700;
+  }
+
+  /* Role Badge */
+  .author-role-badge {
+    display: inline-block;
+    background: var(--accent-glow);
+    color: var(--accent);
+    padding: 3px 12px;
+    border-radius: 100px;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    border: 1px solid rgba(201,75,42,.2);
+    margin-bottom: 8px;
+  }
+</style>
+
+<div class="author-profile-wrap">
+
+  <!-- Cover Banner -->
+  <div class="author-cover-banner">
+    <div class="author-avatar-wrap">
+      {% if author.profile_photo %}
+        <img src="{{ author.profile_photo.url }}" alt="{{ author.fname }}" class="author-avatar-lg">
+      {% else %}
+        <div class="author-avatar-placeholder">{{ author.fname|first|upper }}</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Info Row -->
+  <div class="author-info-row">
+    <div class="author-info-left">
+      <div class="author-role-badge">✦ {{ author.role }}</div>
+      <h2>{{ author.fname }} {{ author.lname }}</h2>
+      
+    </div>
+
+    <!-- Follow Button -->
+    {% if user.is_authenticated and user != author %}
+      <a href="{% url 'follow_user' author.id %}" class="follow-action-btn {% if is_following %}following{% else %}follow{% endif %}">
+        {% if is_following %}
+          ✓ Following
+        {% else %}
+          + Follow
+        {% endif %}
+      </a>
+    {% endif %}
+  </div>
+
+  <div class="author-stats-row">
+  <div class="author-stat-item">
+    <strong>{{ posts.count }}</strong>
+    <span>Posts</span>
+  </div>
+  <div class="author-stat-item">
+    <strong>{{ followers_count }}</strong>
+    <span>Followers</span>
+  </div>
+  <div class="author-stat-item">
+    <strong>{{ following_count }}</strong>
+    <span>Following</span>
+  </div>
+</div>
+
+  <!-- Bio -->
+  {% if author.bio %}
+    <p class="author-bio">{{ author.bio }}</p>
+  {% else %}
+    <p class="author-bio" style="font-style:italic">No bio added yet.</p>
+  {% endif %}
+
+  <div class="author-divider"></div>
+
+  <!-- Posts -->
+  <div class="author-posts-heading">
+    Posts <span>{{ posts.count }}</span>
+  </div>
+
+  <div class="posts-grid">
+    {% for post in posts %}
+    <article class="post-card" onclick="location.href='{% url 'blog_details' post.id %}'">
+      <div class="post-img-wrap">
+        {% if post.post_image %}
+          <img class="post-img" src="{{ post.post_image.url }}" alt="{{ post.post_title }}">
+        {% else %}
+          <img class="post-img" src="{% static 'images/myimage.png' %}" alt="default">
+        {% endif %}
+        <span class="post-cat-pin">{{ post.post_category }}</span>
+      </div>
+      <div class="post-body">
+        <div class="post-meta-row">
+          <span class="post-date">{{ post.created_at|date:"M d, Y" }}</span>
+        </div>
+        <h3 class="post-title">{{ post.post_title }}</h3>
+        <div class="post-footer">
+          <div class="post-stats">
+            <span>♥ {{ post.likes.count }}</span>
+            <span>💬 {{ post.comments.count }}</span>
+          </div>
+        </div>
+      </div>
+    </article>
+    {% empty %}
+    <p style="color:var(--ink-muted); grid-column:1/-1">Koi post nahi hai abhi!</p>
+    {% endfor %}
+  </div>
+
+</div>
+
+{% endblock %}

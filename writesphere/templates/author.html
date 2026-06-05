@@ -18,65 +18,81 @@
     <!-- STATS BAR -->
     <div class="authors-stats">
       <div class="stat-item">
-        <strong id="totalCount">12</strong>
+        <strong>{{ authors.count }}</strong>
         <span>Total Authors</span>
       </div>
       <div class="stat-divider"></div>
       <div class="stat-item">
-        <strong id="followingCount">0</strong>
+        <strong>{{ following_ids|length }}</strong>
         <span>You Follow</span>
       </div>
       <div class="stat-divider"></div>
       <div class="stat-item">
-        <strong>48.2k</strong>
+        <strong>{{ total_posts }}</strong>
         <span>Total Stories</span>
       </div>
-      <div class="stat-divider"></div>
-      <div class="stat-item">
-        <strong>2.4M</strong>
-        <span>Total Readers</span>
-      </div>
-      <p class="following-note">Following <strong id="followingNote">0</strong> authors</p>
-    </div>
-
-    <!-- TABS -->
-    <div class="authors-tabs">
-      <button class="atab active" onclick="switchTab(this, 'all')">All Authors</button>
-      <button class="atab" onclick="switchTab(this, 'following')">Following</button>
-      <button class="atab" onclick="switchTab(this, 'trending')">Trending</button>
-    </div>
-
-    <!-- FEATURED AUTHORS -->
-    <div class="featured-author-section" id="featuredSection">
-      <h2>⭐ Featured This Week</h2>
-      <div class="featured-strip" id="featuredStrip"></div>
+      <p class="following-note">Following <strong>{{ following_ids|length }}</strong> authors</p>
     </div>
 
     <!-- FILTER BAR -->
-<div class="authors-filter-bar">
-  <div class="container">
-    <div class="filter-row">
-      <button class="filter-chip active" onclick="filterCategory(this, 'all')">All</button>
-      <button class="filter-chip" onclick="filterCategory(this, 'tech')">Technology</button>
-      <button class="filter-chip" onclick="filterCategory(this, 'travel')">Travel</button>
-      <button class="filter-chip" onclick="filterCategory(this, 'wellness')">Wellness</button>
-      <button class="filter-chip" onclick="filterCategory(this, 'design')">Design</button>
-      <button class="filter-chip" onclick="filterCategory(this, 'philosophy')">Philosophy</button>
-      <button class="filter-chip" onclick="filterCategory(this, 'fiction')">Fiction</button>
-      <div class="author-search-wrap" style="margin-left:auto">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="authorSearch" placeholder="Search authors..." oninput="searchAuthors(this.value)">
+    <div class="authors-filter-bar">
+      <div class="container">
+        <div class="filter-row">
+          <button class="filter-chip active">All</button>
+          <div class="author-search-wrap" style="margin-left:auto">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="authorSearch" placeholder="Search authors...">
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
     <!-- ALL AUTHORS GRID -->
     <div class="section-heading">
-      <h2 id="gridTitle">All Authors</h2>
-      <span class="count-badge" id="gridCount">12 authors</span>
+      <h2>All Authors</h2>
+      <span class="count-badge">{{ authors.count }} authors</span>
     </div>
-    <div class="authors-main-grid" id="authorsGrid"></div>
+
+    <div class="authors-main-grid">
+      {% for author in authors %}
+      <div class="author-card-full" onclick="location.href='{% url 'author_detail' author.id %}'">
+        <div class="ac-cover" style="background:linear-gradient(135deg,#667eea,#764ba2)"></div>
+        <div class="ac-avatar-wrap">
+          {% if author.profile_photo %}
+            <img src="{{ author.profile_photo.url }}" class="ac-avatar" style="object-fit:cover">
+          {% else %}
+            <div class="ac-avatar">{{ author.fname|first|upper }}</div>
+          {% endif %}
+        </div>
+        <div class="ac-body">
+          <div class="ac-name">{{ author.fname }} {{ author.lname }}</div>
+          <div class="ac-role">{{ author.role }}</div>
+          <p class="ac-bio">{% if author.bio %}{{ author.bio }}{% else %}No bio added yet.{% endif %}</p>
+          <div class="ac-nums">
+            <div class="ac-num-item">
+              <strong>{{ author.post_set.count }}</strong>
+              <span>Stories</span>
+            </div>
+            <div class="ac-num-item">
+              <strong>{{ author.followers.count }}</strong>
+              <span>Followers</span>
+            </div>
+            <div class="ac-num-item">
+              <strong>{{ author.following.count }}</strong>
+              <span>Following</span>
+            </div>
+          </div>
+          {% if user.is_authenticated and user != author %}
+            <a href="{% url 'follow_user' author.id %}" class="follow-btn {% if author.id in following_ids %}following{% endif %}" onclick="event.stopPropagation()">
+              {% if author.id in following_ids %}Following ✓{% else %}Follow{% endif %}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+      {% empty %}
+      <p style="color:var(--ink-muted)">Koi author nahi mila!</p>
+      {% endfor %}
+    </div>
 
     <!-- EMPTY STATE -->
     <div class="empty-state" id="emptyState" style="display:none">
@@ -88,6 +104,4 @@
   </div>
 </section>
 <script src="{% static 'js/main.js' %}"></script>
-</body>
-</html>
 {% endblock %}

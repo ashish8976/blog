@@ -132,7 +132,6 @@ document.addEventListener('DOMContentLoaded', () => {
     likeBtn.classList.toggle('liked', liked);
     count = liked ? count + 1 : count - 1;
     likeCount.textContent = formatNumber(count);
-    // Pulse animation
     likeBtn.animate([
       { transform: 'scale(1)' },
       { transform: 'scale(1.18)' },
@@ -178,7 +177,6 @@ document.addEventListener('DOMContentLoaded', () => {
     textarea.value = '';
     showToast('Comment posted! ✓');
 
-    // Update count display
     const countEl = $('#commentCount');
     if (countEl) countEl.textContent = parseInt(countEl.textContent || 0) + 1;
   });
@@ -202,7 +200,6 @@ function deleteComment(btn) {
     chip.addEventListener('click', () => {
       chips.forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
-      // In real app, this triggers fetch. Here we just animate
       $$('.post-card').forEach((card, i) => {
         card.style.opacity = '0';
         setTimeout(() => { card.style.opacity = '1'; card.style.transition = 'opacity .3s'; }, i * 40);
@@ -210,7 +207,6 @@ function deleteComment(btn) {
     });
   });
 
-  // Search functionality
   const searchInput = $('.search-wrap input');
   const searchBtn = $('.search-wrap button');
   if (searchInput && searchBtn) {
@@ -274,7 +270,6 @@ function deleteComment(btn) {
     });
   }
 
-  // Toolbar buttons
   $$('.tb-btn[data-cmd]').forEach(btn => {
     btn.addEventListener('click', () => {
       if (!editorBody) return;
@@ -289,7 +284,6 @@ function deleteComment(btn) {
     });
   });
 
-  // Cover image upload preview
   const fileInput = $('#coverFileInput');
   const uploadDrop = $('#uploadDrop');
   if (fileInput && uploadDrop) {
@@ -313,7 +307,6 @@ function deleteComment(btn) {
     }
   }
 
-  // Tags input
   const tagWrap = $('#tagInputWrap');
   const tagField = $('#tagField');
   if (tagWrap && tagField) {
@@ -328,7 +321,6 @@ function deleteComment(btn) {
     tagWrap.addEventListener('click', () => tagField.focus());
   }
 
-  // Publish / Draft buttons
   const publishBtn = $('#publishBtn');
   const draftBtn = $('#draftBtn');
   if (publishBtn) {
@@ -365,7 +357,6 @@ function addTag(name) {
    AUTH FORMS
    ============================================ */
 (function initAuth() {
-  // Password strength indicator
   const pwdInput = $('#passwordInput');
   const strengthBar = $('#strengthBar');
   if (pwdInput && strengthBar) {
@@ -385,7 +376,6 @@ function addTag(name) {
     });
   }
 
-  // Form validation feedback
   $$('.form-input').forEach(input => {
     input.addEventListener('blur', () => {
       if (input.required && !input.value.trim()) {
@@ -397,12 +387,10 @@ function addTag(name) {
     input.addEventListener('focus', () => { input.style.borderColor = ''; });
   });
 
-  // Google sign-in (demo)
   $$('.google-btn').forEach(btn => {
     btn.addEventListener('click', () => showToast('Google OAuth coming soon!', 'info'));
   });
 })();
-
 
 /* ============================================
    BLOG SHARE
@@ -440,309 +428,4 @@ document.addEventListener('click', e => {
   $$('.nav-links a').forEach(a => {
     if (a.getAttribute('href') === page) a.classList.add('active');
   });
-})();
-
-/* ============================================
-   AUTHORS PAGE — Full System (merged from author.js)
-   ============================================ */
-(function initAuthorsPage() {
-  if (!document.getElementById('authorsGrid')) return; // Only run on author.html
-
-  // ── Author Data ──
-  const authors = [
-    {
-      id: 1, name: 'Arjun Mehta', initials: 'A',
-      role: 'Tech & AI Writer', bio: 'Exploring the intersection of technology, humanity, and the systems that shape our future.',
-      tags: ['tech'], tagLabels: ['Technology', 'AI'],
-      followers: '12.4k', stories: 48, likes: '89.2k',
-      gradient: 'linear-gradient(135deg,#f093fb,#f5576c)',
-      cover: 'linear-gradient(135deg,#667eea,#764ba2)',
-      featured: true, trending: true
-    },
-    {
-      id: 2, name: 'Lena Park', initials: 'L',
-      role: 'Travel & Culture', bio: 'Wandering the world one story at a time. Currently obsessed with slow travel and local food.',
-      tags: ['travel'], tagLabels: ['Travel', 'Culture'],
-      followers: '8.7k', stories: 34, likes: '52.1k',
-      gradient: 'linear-gradient(135deg,#43e97b,#38f9d7)',
-      cover: 'linear-gradient(135deg,#43e97b,#38f9d7)',
-      featured: true, trending: false
-    },
-    {
-      id: 3, name: 'Priya Nair', initials: 'P',
-      role: 'Wellness & Science', bio: 'Making complex science simple and showing why taking care of yourself is a radical act.',
-      tags: ['wellness'], tagLabels: ['Wellness', 'Health'],
-      followers: '15.2k', stories: 61, likes: '120k',
-      gradient: 'linear-gradient(135deg,#fa709a,#fee140)',
-      cover: 'linear-gradient(135deg,#fa709a,#fee140)',
-      featured: false, trending: true
-    },
-    {
-      id: 4, name: 'James Okonkwo', initials: 'J',
-      role: 'Philosophy & Mindset', bio: 'Ancient wisdom for modern minds. Writing at the crossroads of stoicism, ethics, and everyday life.',
-      tags: ['philosophy'], tagLabels: ['Philosophy', 'Mindset'],
-      followers: '21.3k', stories: 29, likes: '98.4k',
-      gradient: 'linear-gradient(135deg,#4facfe,#00f2fe)',
-      cover: 'linear-gradient(135deg,#4facfe,#00f2fe)',
-      featured: true, trending: true
-    },
-    {
-      id: 5, name: 'Vikram Shah', initials: 'V',
-      role: 'Design & UX', bio: 'Designing experiences that feel invisible. Passionate about typography, systems, and human-centered design.',
-      tags: ['design'], tagLabels: ['Design', 'UX'],
-      followers: '9.8k', stories: 22, likes: '67.5k',
-      gradient: 'linear-gradient(135deg,#667eea,#764ba2)',
-      cover: 'linear-gradient(135deg,#764ba2,#667eea)',
-      featured: false, trending: false
-    },
-    {
-      id: 6, name: 'Sofia Reyes', initials: 'S',
-      role: 'Travel & Photography', bio: 'Chasing light at the edges of the world. My stories come with mud on the boots.',
-      tags: ['travel'], tagLabels: ['Travel', 'Nature'],
-      followers: '18.6k', stories: 53, likes: '143k',
-      gradient: 'linear-gradient(135deg,#f5576c,#c0392b)',
-      cover: 'linear-gradient(135deg,#f5576c,#c0392b)',
-      featured: true, trending: true
-    },
-    {
-      id: 7, name: 'Rahul Das', initials: 'R',
-      role: 'Fiction & Storytelling', bio: 'Writing the stories I wish existed. Speculative fiction, magical realism, and the spaces between.',
-      tags: ['fiction'], tagLabels: ['Fiction', 'Story'],
-      followers: '6.2k', stories: 17, likes: '38.9k',
-      gradient: 'linear-gradient(135deg,#a18cd1,#fbc2eb)',
-      cover: 'linear-gradient(135deg,#a18cd1,#fbc2eb)',
-      featured: false, trending: false
-    },
-    {
-      id: 8, name: 'Mei Lin', initials: 'M',
-      role: 'Science & Innovation', bio: 'PhD dropout turned science communicator. Translating complex research into everyday wonder.',
-      tags: ['tech', 'wellness'], tagLabels: ['Science', 'Innovation'],
-      followers: '11.1k', stories: 39, likes: '71.3k',
-      gradient: 'linear-gradient(135deg,#30cfd0,#667eea)',
-      cover: 'linear-gradient(135deg,#30cfd0,#667eea)',
-      featured: false, trending: true
-    },
-    {
-      id: 9, name: 'Carlos Rivera', initials: 'C',
-      role: 'Design & Branding', bio: 'Brand identity, visual culture, and why good design is never really just about aesthetics.',
-      tags: ['design'], tagLabels: ['Branding', 'Visual'],
-      followers: '7.4k', stories: 25, likes: '44.8k',
-      gradient: 'linear-gradient(135deg,#f093fb,#f5576c)',
-      cover: 'linear-gradient(135deg,#f093fb 0%,#c0392b 100%)',
-      featured: false, trending: false
-    },
-    {
-      id: 10, name: 'Anya Petrov', initials: 'A',
-      role: 'Philosophy & Ethics', bio: 'Asking the hard questions about technology, power, and what it means to live a good life.',
-      tags: ['philosophy'], tagLabels: ['Ethics', 'Society'],
-      followers: '13.7k', stories: 31, likes: '82.1k',
-      gradient: 'linear-gradient(135deg,#43e97b,#38f9d7)',
-      cover: 'linear-gradient(135deg,#2c3e50,#3498db)',
-      featured: false, trending: false
-    },
-    {
-      id: 11, name: 'Omar Hassan', initials: 'O',
-      role: 'Travel & Adventure', bio: "From the Sahara to the Arctic. If it's remote, difficult, and extraordinary — I'm going.",
-      tags: ['travel'], tagLabels: ['Adventure', 'Exploration'],
-      followers: '22.9k', stories: 44, likes: '167k',
-      gradient: 'linear-gradient(135deg,#fda085,#f6d365)',
-      cover: 'linear-gradient(135deg,#fda085,#f6d365)',
-      featured: true, trending: true
-    },
-    {
-      id: 12, name: 'Zoe Kim', initials: 'Z',
-      role: 'Wellness & Mindfulness', bio: 'Therapist turned writer. Making mental health conversations feel less scary and more human.',
-      tags: ['wellness'], tagLabels: ['Mental Health', 'Mindfulness'],
-      followers: '19.3k', stories: 58, likes: '134k',
-      gradient: 'linear-gradient(135deg,#a1c4fd,#c2e9fb)',
-      cover: 'linear-gradient(135deg,#a1c4fd,#c2e9fb)',
-      featured: false, trending: true
-    }
-  ];
-
-  // ── State ──
-  const followingSet = new Set();
-  let currentTab = 'all';
-  let currentCategory = 'all';
-  let searchQuery = '';
-
-  // ── Render Featured Strip ──
-  function renderFeatured() {
-    const strip = document.getElementById('featuredStrip');
-    if (!strip) return;
-    strip.innerHTML = authors.filter(a => a.featured).map(a => `
-      <div class="featured-mini-card" onclick="location.href='profile.html'">
-        <div class="avatar-placeholder avatar-md" style="background:${a.gradient};font-size:.9rem">${a.initials}</div>
-        <div class="fmc-info">
-          <div class="fmc-name">${a.name}</div>
-          <div class="fmc-tag">${a.role}</div>
-        </div>
-        <button class="fmc-follow ${followingSet.has(a.id) ? 'following' : ''}"
-          onclick="event.stopPropagation(); toggleFollowMini(this, ${a.id})">
-          ${followingSet.has(a.id) ? '✓' : '+'}
-        </button>
-      </div>
-    `).join('');
-  }
-
-  // ── Render Authors Grid ──
-  function renderGrid() {
-    let filtered = authors;
-    if (currentTab === 'following') filtered = filtered.filter(a => followingSet.has(a.id));
-    if (currentTab === 'trending') filtered = filtered.filter(a => a.trending);
-    if (currentCategory !== 'all') filtered = filtered.filter(a => a.tags.includes(currentCategory));
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      filtered = filtered.filter(a =>
-        a.name.toLowerCase().includes(q) ||
-        a.role.toLowerCase().includes(q) ||
-        a.tagLabels.some(t => t.toLowerCase().includes(q))
-      );
-    }
-
-    const grid = document.getElementById('authorsGrid');
-    const empty = document.getElementById('emptyState');
-    const count = document.getElementById('gridCount');
-    if (!grid) return;
-
-    if (filtered.length === 0) {
-      grid.innerHTML = '';
-      if (empty) empty.style.display = 'block';
-      if (count) count.textContent = '0 authors';
-    } else {
-      if (empty) empty.style.display = 'none';
-      if (count) count.textContent = `${filtered.length} author${filtered.length !== 1 ? 's' : ''}`;
-      grid.innerHTML = filtered.map(a => `
-        <div class="author-card-full" data-id="${a.id}">
-          <div class="ac-cover" style="background:${a.cover}"></div>
-          <div class="ac-avatar-wrap">
-            <div class="ac-avatar" style="background:${a.gradient}">${a.initials}</div>
-          </div>
-          <div class="ac-body">
-            <div class="ac-name">${a.name}</div>
-            <div class="ac-role">${a.role}</div>
-            <p class="ac-bio">${a.bio}</p>
-            <div class="ac-tags">${a.tags.map((t, i) => `<span class="tag cat-${t}">${a.tagLabels[i] || a.tagLabels[0]}</span>`).join('')}</div>
-            <div class="ac-nums">
-              <div class="ac-num-item"><strong>${a.followers}</strong><span>Followers</span></div>
-              <div class="ac-num-item"><strong>${a.stories}</strong><span>Stories</span></div>
-              <div class="ac-num-item"><strong>${a.likes}</strong><span>Likes</span></div>
-            </div>
-            <button class="follow-btn ${followingSet.has(a.id) ? 'following' : ''}"
-              onclick="toggleFollowCard(this, ${a.id})">
-              <span class="btn-text"></span>
-            </button>
-          </div>
-        </div>
-      `).join('');
-    }
-    updateAuthorStats();
-  }
-
-  // ── Update Stats Bar ──
-  function updateAuthorStats() {
-    const fc = followingSet.size;
-    const el1 = document.getElementById('followingCount');
-    const el2 = document.getElementById('followingNote');
-    if (el1) el1.textContent = fc;
-    if (el2) el2.textContent = fc;
-  }
-
-  // ── Expose functions to global scope (used by inline onclick in HTML) ──
-
-  // ── Category label map for banner ──
-  const catLabels = {
-    all: 'All', tech: 'Technology', travel: 'Travel',
-    wellness: 'Wellness', design: 'Design',
-    philosophy: 'Philosophy', fiction: 'Fiction'
-  };
-
-  // ── Update active category banner ──
-  function updateCatBanner(cat) {
-    const banner = document.getElementById('activeCatBanner');
-    const label = document.getElementById('activeCatLabel');
-    if (!banner || !label) return;
-    if (cat === 'all') {
-      banner.style.display = 'none';
-    } else {
-      label.textContent = 'Showing: ' + catLabels[cat];
-      banner.style.display = 'flex';
-    }
-  }
-
-  window.toggleFollowCard = function (btn, id) {
-    const isFollowing = followingSet.has(id);
-    if (isFollowing) {
-      followingSet.delete(id);
-      btn.classList.remove('following');
-      showToast('Unfollowed');
-    } else {
-      followingSet.add(id);
-      btn.classList.add('following');
-      btn.classList.remove('pulse-anim');
-      void btn.offsetWidth;
-      btn.classList.add('pulse-anim');
-      btn.addEventListener('animationend', () => btn.classList.remove('pulse-anim'), { once: true });
-      showToast('Following! ✓');
-    }
-    updateAuthorStats();
-    renderFeatured();
-    if (currentTab === 'following') renderGrid();
-  };
-
-  window.toggleFollow = window.toggleFollow || function (btn, idOrEvent) {
-    if (typeof idOrEvent === 'number') window.toggleFollowCard(btn, idOrEvent);
-  };
-
-  window.toggleFollowMini = function (btn, id) {
-    if (followingSet.has(id)) {
-      followingSet.delete(id);
-      btn.classList.remove('following');
-      btn.textContent = '+';
-      showToast('Unfollowed');
-    } else {
-      followingSet.add(id);
-      btn.classList.add('following');
-      btn.textContent = '✓';
-      showToast('Following! ✓');
-    }
-    updateAuthorStats();
-    renderGrid();
-  };
-
-  window.filterCategory = function (chip, cat) {
-    $$('.filter-chip').forEach(c => c.classList.remove('active'));
-    chip.classList.add('active');
-    currentCategory = cat;
-    updateCatBanner(cat);
-    renderGrid();
-  };
-
-  window.switchTab = function (tab, name) {
-    $$('.atab').forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    currentTab = name;
-    const featuredSection = document.getElementById('featuredSection');
-    const gridTitle = document.getElementById('gridTitle');
-    if (name === 'following') {
-      if (featuredSection) featuredSection.style.display = 'none';
-      if (gridTitle) gridTitle.textContent = 'Authors You Follow';
-    } else if (name === 'trending') {
-      if (featuredSection) featuredSection.style.display = 'none';
-      if (gridTitle) gridTitle.textContent = 'Trending Authors';
-    } else {
-      if (featuredSection) featuredSection.style.display = 'block';
-      if (gridTitle) gridTitle.textContent = 'All Authors';
-    }
-    renderGrid();
-  };
-
-  window.searchAuthors = function (val) {
-    searchQuery = val.trim();
-    renderGrid();
-  };
-
-  // ── Init ──
-  renderFeatured();
-  renderGrid();
 })();
